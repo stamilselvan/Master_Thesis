@@ -1,0 +1,15 @@
+\chapter{Future Directions}
+\label{chap:future_directions}
+
+Latency reduction is greatly influenced by the amount of parallelism available in the application. Among the A/A Mode benchmarks, Convolution and FFT are the major latency contributors. FFTW library is executed serially per channel.\\
+
+Breaking the FFT, Convolution benchmark in to parallel executable modules will allow greater improvement of execution time. Provided it needs more CPUs to do so.In addition, FFTW library doesn't use ARM NEON intrinsic functions. Exploiting parallel execution lanes will improve the latency in single threaded as well as multi-threaded environment.\\
+
+Benchmarks like Complex Multiply Accumulate (CMYACC), Range Multiply (RMY), Magnitude (MAG), Area Average Calculation (AVG) and Comparison (CMPR) have lot amount of parallelism. Loop iterations in the above benchmarks can be scheduled to run in parallel. This is a way to achieve much higher speed up. \\
+
+Corner Turning can be implemented by Cache-Oblivious Algorithm to avoid frequent cache misses. This will reduce memory bandwidth as well as execution time.\\
+
+Effect of various L2-Cache size and Memory size can be performed to determine optimal size for working set data. Associativity can also be included to examine the performance.  
+
+%
+

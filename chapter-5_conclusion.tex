@@ -1,0 +1,62 @@
+\chapter{Future Scope and Conclusion}
+\label{chap:conclusion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%   SECTION   %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Some Implementation Details}
+\label{sec:ch5:hurdles}
+
+\verb|wait_for_all_threads()| function (Appendix \ref{app:code:wait_for_others}) works as follows providing a synchronization point. A thread reaching this function first locks the mutex variable \verb|mutex| then waits on condition variable \verb|cv_count|. The 4$^{th}$ thread reaching the function will release the condition variable by broadcasting followed by releasing the mutex \verb|mutex|. Now one thread has passed the synchronization point and remaining three threads are waiting for the mutex access, called thread wakeup. In the program execution, there may be a scenario where the first thread crossing the sync point will reach second sync point, again comes back to  \verb|wait_for_all_threads()|, waiting for mutex access. Figure \ref{fig:conclusion:thread_wakeup}, illustrates the first three threads are waiting at sync1, while the 4$^{th}$ thread crossed sync1 and waiting for mutex access corresponds to sync2. On such occasions, the order of thread wakeup relies on the scheduling policy of the thread \cite{pthreadWait}. This goes haywire in a multithreaded environment where the order of thread execution is non deterministic. This issue occurred at sporadic intervals making it hard to debug. Validating the number of awakened thread solved the problem. It acts as a guard for mutex lock mechanism. \\
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=140mm]{figures/wait_for_all_threads}
+	\caption{Race Condition in wait\_for\_all\_threads() Function}
+	\label{fig:conclusion:thread_wakeup}
+\end{figure}
+
+The benchmarks should be thread-safe to be executed in parallel threads. FFTW has \verb|fftw_plan| stage to prepare input parameters of \verb|fftw_execute|. According to the FFTW documentation, \verb|fftw_execute| is thread-safe, but not \verb|fftw_plan| \cite{fftThreadSafe}. However, the same plan can be used for multiple threads in parallel. Instead of all threads executing \verb|fftw_plan|, only one thread is allowed to execute \verb|fftw_plan|, then all threads are allowed to do \verb|fftw_execute| in parallel. \vspace*{0.3cm}
+
+SQLite library is used to store execution time measurements of the Radar benchmarks into database. The Radar algorithm has ten performance critical functions as benchmarks. Every thread will store the execution measurement result at the end of every benchmark processing. The SQLite library performs well in a single threaded application with relatively less number of insertions. The scene is extremely different in multithreaded environment. Data insertions have to be mutually exclusive as only one database is used through the application. Four threads, running on four cores inserting 40,000 records consumed 15 hours on ARM Cortex A9 platform. Retrieval is also equally slow. On the other hand, \verb|.csv| implementation of the same did it in couple of minutes. Processing data is also simple and convenient as it can be interpreted by Microsoft Excel.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%   SECTION   %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Future Scope}
+There are lot of scopes for fine tuning the application and extending the research work. Some of them are discussed below.
+
+\subsection{Parallel Executable Modules}
+Latency reduction is greatly influenced by the amount of parallelism available in the application. Among the A/A Mode benchmarks, Convolution and FFT are the major latency contributors. Scheme-4 executes FFTW library for every channel (Sum, Guard, Azimuth and Elevation) in sequential order, whilst Scheme-5 performs channel computations in parallel. In any case, single instance of FFT library is executed in serial. Breaking the FFT, Convolution benchmarks into parallel executable modules will allow greater improvement of execution time. This enables more than one core performing FFT computation of one channel, resulting in speedup factor of broken parallel modules. \vspace*{0.2cm}
+
+Benchmarks like Complex Multiply Accumulate (CMYACC), Range Multiply (RMY), Magnitude (MAG), Area Average Calculation (AVG) and Comparison (CMPR) have lot amount of parallelism. Loop iterations in the above benchmarks can be split to run in parallel. Effective speedup will be equal to number of parallel executable modules. Although breaking the application for parallel execution increases speedup, it needs more computing entities to carry out the task. A balanced factor of speedup vs resource requirement shall be opted for implementation. 
+
+\subsection{Architectural Features}
+The FFTW library doesn't use special architecture features, thus it is not optimized for ARM Cortex A9 platform. 128-bit advanced SIMD unit of ARM Cortex A9 can perform four math operations of 32-bit data at the cost of one math operation. Exploiting such feature will reduce the latency of the computation heavy modules in single threaded as well as multi-threaded environment.
+
+\subsection{Cache Performance}
+The more the data locality in the application, the less the memory transfer between SDRAM and core. Fetching data from memory is relatively slow and expensive. Corner turning is implemented as generic row-column transpose form. The data access pattern row-column wise, makes frequent cache misses. Corner turning can be implemented by Cache-Oblivious Algorithm to improve data locality. This will reduce memory transfer bandwidth as well as execution time.  \vspace*{0.2cm}
+
+In Scheme-5, the burst data size after beamforming is 52KiB. A core having 32KiB private L1 cache can hold 61\% of the beamformed data. As an over approximation approach, 0\% cache hit rate is assumed for the analysis. This is not the case in real world. Cache hit rate prediction mechanism shall be employed to have more realistic results. \vspace*{0.2cm}
+
+Effect of various L2-Cache size and Memory size can be performed to determine the optimal size for working set data. Associativity can also be included to examine the performance.
+
+\subsection{SAR Mode}
+This thesis has only considered A/A Mode processing of the Radar processor. The techniques shall be extended to adopt SAR Mode processing. A Radar processor should be capable of performing A/A Mode and SAR Mode processing in real time.
+
+\clearpage
+\section{Conclustion}
+\label{sec:ch5:conclustion}
+This thesis has presented the Airborne Radar processing chain, IMA processor architecture for safety critical systems and existing mode mapping analysis. Inference from the existing analysis is that the latency is far higher than the acceptable values. Data dependency is scrutinized to leverage parallelism in the application. Pseudo algorithm of the Radar processing chain is implemented and the latency is measured on a real hardware. Measurement tools for memory utilization and bandwidth utilization have been made. \vspace*{0.2cm}
+
+Couple of optimization schemes have been implemented for Air to Air Mode processing. Based on the new mode mapping analysis, the optimized scheme guarantees 7.5x speedup than the existing analysis with less number of resources. The achieved 2x dwell latency is healthy enough for the A/A Mode Radar processor. \vspace*{0.2cm}
+
+This thesis concludes that the A/A Mode Radar processing can be done on the IMA processer architecture in real time. It saves space, weight and power requirements. To compare this in day to day life, eight Samsung Galaxy S-III mobiles are sufficient to deliver the same performance!
+
+%Transforming development stage to the production stage will rip out the complex operating system, unnecessary interfaces and unused modules from the hardware platform. This will minimize some overhead in processing. \\
