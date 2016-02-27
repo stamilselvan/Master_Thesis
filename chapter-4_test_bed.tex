@@ -234,7 +234,7 @@ Executable code is transferred to the Nitrogen6X board via Ethernet. Benchmark p
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Memory Transfer Bandwidth}
 \label{ss:mm:mem_bw}
-STREAM benchmark\cite{McCalpin2007} is used to measure memory bandwidth of the machine. The STREAM benchmark is a simple, synthetic benchmark designed to measure sustainable memory bandwidth (in MB/s) and a corresponding computation rate for four simple vector kernels namely Copy, Scale, Add and Triad \cite{streamDef}. Peak achievable memory bandwidth is measured by running threaded STREAM benchmark on Nitrogen6X board. Only STREAM benchmark is started by the user to guarantee that the measurement is not affected by other user applications.  The STREAM benchmark is compiled and executed as follows: \\
+Peak achievable memory bandwidth is measured by running threaded STREAM benchmark on Nitrogen6X board. Only STREAM benchmark is started by the user to guarantee that the measurement is not affected by other user applications.  The STREAM benchmark is compiled and executed as follows: \\
 
 \lstset{ %
   backgroundcolor=\color{mildyellow},
@@ -326,45 +326,6 @@ user$ sudo nice -n -20 ./AA_space_partition
 \label{ss:mm:cpu_load}
 CPU Load is the ratio of busy time to the total time. Busy time is the execution time on a particular CPU and total time is the time delay between two consecutive inputs to the same CPU. The CPU load says the percentage of utilization as well as the remaining buffer time for future growth. 50\% spare time is a healthy value for CPU load. This spare time can be used for health monitoring that reports hardware and software failures. By doing so, faults can be isolated and stopped from propagating.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%   SUB-SECTION   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A/A Mode Sequence of Execution}
-By matching the A/A Mode Processing Chain explained in Chapter \ref{sec:bg_related_work:proc_chain} and the list of benchmarks in Chapter \ref{sec:ch2:benchmark_results}, the following benchmarks are chosen to mimic the A/A mode Radar processing chain.
-
-\begin{longtable}{|p{1.6cm}|p{1.9cm}|p{1.7cm}|p{1.9cm}|p{6cm}|} 
-	 \hline
-	\multicolumn{3}{|l|}{\textbf{Processing Chain}} & \textbf{Benchmark} & \textbf{Description} \\ \hline
-	 \multirow{3}{*}{\parbox{1.7cm}{Time Domain Processing}} & \multirow{2}{*}{\parbox{1.5cm}{Beamform-ing}} & Beamform-ing & CMYACC & Sum, Azimuth and Elevation channel data are complex multiplied and the results are summed up \\ \cline{3-5}
-	 & & Weight-ing & RMY & 4 channel data are multiplied with weighting vector. \\ \cline{2-5}
-	& \multicolumn{2}{|l|}{Pulse compression} & CONV & Pulse compression in frequency domain. \\ \hline
-	
-	\multirow{3}{*}{\parbox{1.7cm}{Frequency Domain Processing}} & \multicolumn{2}{|l|}{Corner turning} & COT & 4 channel input data are corner turned. \\ \cline{2-5}
-	& \multirow{2}{*}{\parbox{1.7cm}{Frequency Domain Transformation}} & Window-ing & RMY & 4 channel data are multiplied with windowing vector. \\ \cline{3-5}
-	& & FFT & FFT & Transform time domain data to frequency domain. \\ \cline{2-5}
-	& \multicolumn{2}{|l|}{Amplitude calculation} & MAG & Magnitude calculation of the Sum channel and Guard chanel data. \\ \hline
-\end{longtable}
-\clearpage
-\begin{longtable}{|p{1.6cm}|p{1.9cm}|p{1.7cm}|p{1.9cm}|p{6cm}|} 
-	 \hline
-	\multicolumn{3}{|l|}{\textbf{Processing Chain}} & \textbf{Benchmark} & \textbf{Description} \\ \hline
-	\multirow{3}{*}{\parbox{1.7cm}{Detection Processing}} & \multicolumn{2}{|l|}{Area average calculation} & AVG & Area average calculation of the  Sum channel and Guard chanel data. \\ \cline{2-5}
-	& \multirow{2}{*}{\parbox{1.7cm}{Threshold-ing \& Detection}} & Comparison & CMPR & Compare magniture and Area average to produce pre-alarm matrix. \\ \cline{2-5}
-	& & Detection & DET & Detects if the alarms entered through sidelobes by comparing Sum channel alarms against Guard channel alarms. \\ \hline
-	\caption{A/A Mode - Benchmark Selection}
-	\label{tbl:mm:aa_seq_exe}
-\end{longtable}
-
-The benchmarks shall be executed as shown in Figure \ref{fig:bg_related_work:aa_seq} to mimic the Radar processing chain. Functions of the Correlation processing are not included here.The burst, leading to the large data set (N$_{pri}$=205, N$_{rg}$=64) is processed as per the sequence diagram and the results are used for mode mapping analysis. In the following figure, \textsl{3x CMYACC} means, computing \hyperlink{benchmarks}{CMYACC} for three channels.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=160mm]{figures/aa_seq}
-	\caption{A/A Mode, Sequence of Function Execution}
-	\label{fig:bg_related_work:aa_seq}
-\end{figure}
-
-\clearpage
 \section{Performance Comparison of Single Core vs Four Cores}
 \label{sec:mm:perf_comp}
 A performance comparison study has been done on the Nitrogen6X board equipped with ARM Cortex A9 quad core processor running the Radar benchmarks. In Figure \ref{fig:mm:1core_4core}, measurements of 1-thread, CMYACC means running CMYACC benchmark on core1 while other cores are idle. The figure implies that the four core performance is not as good as single core performance. Bottleneck is imposed by the shared resources L2 cache and Memory. In-case more than one core wants to access a shared resource simultaneously, only one core is allowed to access them at a given time. Other cores have to wait until the shared resource is freed again. This increases worst-case execution time of the benchmarks when running on four cores. The values used for the mode mapping analysis belong to the measurements of four core implementation.

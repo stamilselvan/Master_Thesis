@@ -66,9 +66,21 @@ Other terminologies related to this thesis are explained here. \\[0.4cm]
 \noindent
 \textsl{\textbf{PRF:}} Inverse of Pulse Repetition Time is called Pulse Repetition Frequency. \\
 \noindent
-\textsl{\textbf{Dwell:}} Group of 8 different bursts form a dwell.
+\textsl{\textbf{Dwell:}} Group of 8 different bursts form a Dwell.
 \FloatBarrier
+\noindent
+\textsl{\textbf{Range Gate:}} The received  echo signal is sampled at given time intervals called as range gates, shown in Figure \ref{fig:intro:radar:rg}. They represent distance from the Radar transmitter.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=60mm]{figures/range_gate}
+	\caption{Example of Range Gate}
+	\label{fig:intro:radar:rg}
+\end{figure}
+\noindent
+\textsl{\textbf{Air to Air Mode (A/A Mode):}} The Radar mounted on an aircraft, scanning the sky.\\
+\noindent
+\textsl{\textbf{Air to Ground Mode (A/G Mode):}} The Radar mounted on an aircraft, scanning the Ground.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%   SECTION   %%%%%%%%%%%%
@@ -94,7 +106,7 @@ A Radar mounted on an Aircraft or Satellite is called Airborne Radar. The Airbor
 Since this research is in the early stage of development, and to allow room for further requirements, the CPU utilization is restricted to 50\% of the available CPU time, memory utilization should be less than 50\% of the available memory size and the peak data transfer rate of the Radar application should be less than 50\% of the maximum achievable data transfer bandwidth. The real-time requirements of the Radar processor shall be summarized as follows
 \begin{itemize}
         \itemsep0em
-        \item \textit{Resulting processing latency:} The time span between reception of an echo and the processed information is sent out, should be less then 2x dwell time.
+        \item \textit{Resulting processing latency:} The time span between reception of an echo and the processed information is sent out, should be less then 2x Dwell time.
         \item \textit{Memory transfer bandwidth:} <50\%.
         \item \textit{Memory utilization:} <50\%.
         \item \textit{CPU utilization:} <50\%.
@@ -108,9 +120,9 @@ Since this research is in the early stage of development, and to allow room for 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Problem Statement}
 \label{sec:intro:probstatement}
-The Airborne Radar is subjected to operate on different Pulse Repetition Frequencies (PRF) to resolve ambiguity in distance and velocity. Consecutive eight different bursts form a dwell. That is, on every time the Radar probes the sky, it sends one dwell and the echoes are received and analysed. The resulting processing latency of the baseline analysis is theoretically calculated as 15x dwell time (see Table \ref{tbl:mm:scheme1_true_latency}).  It means, to produce the result of the first dwell, it needs as much time as the 15 dwell transmission require. A typical dwell time is 54ms. An Eurofighter Typhoon moving at a speed of Mach 2 would move a distance of 560 meters during this processing time. Half a kilometer difference between detection and display is very high for a typical Airborne Radar processor.
+The Airborne Radar is subjected to operate on different Pulse Repetition Frequencies (PRF) to resolve ambiguity in distance and velocity. Consecutive eight different bursts form a Dwell. That is, on every time the Radar probes the sky, it sends one Dwell and the echoes are received and analysed. The resulting processing latency of the baseline analysis is theoretically calculated as 15x Dwell time (see Table \ref{tbl:mm:scheme1_true_latency}).  It means, to produce the result of the first Dwell, it needs as much time as the 15 Dwell transmission require. A typical Dwell time is 54ms. An Eurofighter Typhoon moving at a speed of Mach 2 would move a distance of 560 meters during this processing time. Half a kilometer difference between detection and display is very high for a typical Airborne Radar processor.
 
-The real-time requirement confines the processing latency to 2x dwell time. The investigation of this thesis is to find an optimal scheduling scheme, number of processors required, data distribution, resulting processing latency and exploit the parallelism in the Radar processing algorithm to stick to the real-time requirements.
+The real-time requirement confines the processing latency to 2x Dwell time. The investigation of this thesis is to find an optimal scheduling scheme, number of processors required, data distribution, resulting processing latency and exploit the parallelism in the Radar processing algorithm to stick to the real-time requirements.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,7 +133,6 @@ The real-time requirement confines the processing latency to 2x dwell time. The 
 \label{sec:intro:contrib}
 One of the major works of this thesis is, binding the performance critical functional blocks of the Radar processing algorithm, to replicate the Radar processing chain, targeting multi-core architecture and multi-threaded application. In summary, the main contributions of this thesis are:
 
-\pagebreak
 \begin{itemize}
 \item{\bf Multi-core Performance}
   \begin{itemize}
