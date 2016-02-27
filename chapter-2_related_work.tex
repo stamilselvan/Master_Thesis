@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Background and Related Work}
 \label{chap:bg_related_work}
-Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. This low cost, portable processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. \\
+Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. The low cost, portable processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. \\
 ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,16 +99,16 @@ Nominal data transfer rate of the communication links are 1GBit/s. Booting the s
 %%%%%%%%%%%%   SECTION   %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiment Setup}
+\section{Experiment Set-up}
 \label{s:bg_related_work:exp_setup}
-To mimic the IMA processor architecture on a single processor level, a Nitrogen6X developer kit is used. The Nitrogen6X is built with iMX6Quad CPU, clocked 1GHz. It is connected via Ethernet interface to a Virtual Machine containing the development environment. Measurements of the execution time are done on the target and exported in \bverb|.csv| format to the VM. The results are scaled down to 800MHz to match the IMA architecture. Mode mapping and latency analysis are based on the single iMX6Quad CPU result measured from the Nitrogen6X board.
+A Nitrogen6X developer kit is used to match the basic building block of the IMA processor architecture. It is built with iMX6Quad processor, clocked 1GHz. The communication to the Nitrogen6X board is carried via Ethernet interface. Measurements of the processing latency are performed on the target and exported in \bverb|.csv| format. The results are scaled down to 800MHz to match the IMA architecture. Scheduling schemes and processing latency analysis are based on the single iMX6Quad processor result, measured from the Nitrogen6X board.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%   SUB-SECTION   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Target Hardware}
 \label{ss:bg_related_work:hw}
-Target hardware is a Nirtogen6X development board (Appendix \ref{app:nitrogen6x}) from Boundary Devices Inc. It is a low cost development kit built with iMX6Quad CPU. Some of it's features are:
+The target hardware is a Nirtogen6X development board (Appendix \ref{app:nitrogen6x}) from Boundary Devices Inc. It is a low cost development kit built with iMX6Quad CPU. Some of it's features are:
 \begin{compactitem} 
 	\item Quad-Core ARM Cortex A9 processor clocked 1GHz
 	\item 1GiB of 64-bit wide DDR3 at 532MHz
@@ -126,11 +126,10 @@ Target hardware is a Nirtogen6X development board (Appendix \ref{app:nitrogen6x}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Software Development Platform}
 \label{ss:bg_related_work:sw}
-Linaro Linux is installed on the Nitrogen6X board along with Lightweight X11 Desktop Environment. The development board is connected to a Virtual Machine via Ethernet. The VM is accessed from Windows Server PC. Other details are:
+Linaro Linux is installed on the Nitrogen6X board along with Lightweight X11 Desktop Environment. Other details are:
 
 \begin{compactitem} 
 	\item \bverb|Linaro Linux 3.0.35-02828-g5cedf96| is installed on Nirtogen6X board.
-	\item \bverb|Debian 3.2.0-4-686-pae| is installed on VM.
 	\item Software Development Environment: Eclipse CDT Version: 3.8.0.
 	\item C compiler: \bverb|gcc Debian 4.7.2-5|.
 	\item Cross compiler: \\ARM A9 cross-compiler \bverb|gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux|.
