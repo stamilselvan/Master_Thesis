@@ -169,6 +169,12 @@ done
 
 \section{Scheme-1}
 \subsection{Utilization of Core\#1}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_1}
+	\caption{Scheme-1, Core\#1 Utilization}
+	\label{fig:existing_analysis:aa_scheme1_cpu_util1}
+\end{figure}
 \begin{align*}
 	\label{aa:scheme1:core1:equ}
 	Burst \enspace data \enspace input & = 64 pulses \enspace * \enspace 103 \frac{range gates}{pulse} \enspace * \enspace 9channel * 4\frac{byte}{sample}\\[0.3cm]
@@ -180,6 +186,12 @@ done
 \end{align*}
 
 \subsection{Utilization of Core\#2}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_2}
+	\caption{Scheme-1, Core\#2 Utilization}
+	\label{fig:existing_analysis:aa_scheme1_cpu_util2}
+\end{figure}
 \begin{align*}
 \label{aa:scheme1:core2:equ1}
 	SDRAM \: to \: L2cache \: time &= 237,312 byte \, * \, 2.29\frac{cycle}{byte} \, * \, 1.25\frac{ns}{cycle} = 0.68 \, ms \\[0.3cm]
@@ -190,27 +202,23 @@ done
 	Data \: copy \: time &= 210,944 byte \, * \, 2.2\frac{cycle}{byte} \, * \, 1.25\frac{ns}{cycle} = 0.53 \, ms \\[0.3cm]
 	Required \: time &= 0.59ms + 0.68ms + 2.54ms + 0.60ms + 0.53ms = 4.94ms \stepcounter{equation}\tag{\theequation} 
 \end{align*}
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_2}
-	\caption{Scheme-1, Core\#2 Utilization}
-	\label{fig:existing_analysis:aa_scheme1_cpu_util2}
-\end{figure}
+
 
 \subsection{Utilization of Core\#3}
-\begin{align*}
-	\label{aa:scheme1:core3:equ}
-	Pulse \: compression &= \bigg(\#channel * \#pulses (CONV128 +  \# \frac{range gates}{pulse} * RMY50)\bigg)\\[0.3cm]  
-	& \quad * \# \: cycle \: time * OSoverhead\\[0.3cm] 
-	&= (4 * 64 (24100 + 103 * 15)) * 1.25 * 1.3 = 10.67ms   \stepcounter{equation}\tag{\theequation} 
-\end{align*}
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/aa_scheme1_cpu_util_3}
 	\caption{Scheme-1, Core\#3 Utilization}
 	\label{fig:existing_analysis:aa_scheme1_cpu_util3}
 \end{figure}
+\begin{align*}
+	\label{aa:scheme1:core3:equ}
+	Pulse \: compression &= \bigg(\#channel * \#pulses (CONV128 +  \# \frac{range gates}{pulse} * RMY50)\bigg)\\[0.3cm]  
+	& \quad * \# \: cycle \: time * OSoverhead\\[0.3cm] 
+	&= (4 * 64 (24100 + 103 * 15)) * 1.25 * 1.3 = 10.67ms   \stepcounter{equation}\tag{\theequation} 
+\end{align*}
 
+\FloatBarrier
 \subsection{Utilization of Core\#4}
 \begin{align*}
 	\label{aa:scheme1:core4:equ1}
@@ -264,4 +272,39 @@ done
 		Required \: time[ms] &= 0.53 + 0.60 + 3.29 + 0.45 + 0.45 + 0.11 + 3.87 = 10.31 \: ms \stepcounter{equation}\tag{\theequation}
 \end{align*}
 
+\subsection{Processing Latency}
+\label{app:sch1:proc_late}
+\begin{align*}
+	\label{aa:scheme1:latency}
+		Processing \: latency &= IO + Beamforming + Pulse \: compression  + FFT,CFAR,Correlation \\
+		&= 32.84 + 41.67 + 112.51 + 146.65 = 333.67 \: ms \\[0.3cm]
+		\#Dwells \: transmitted &= \frac{processing \: latency}{dwell \: time} = \frac{333.67}{27.84} = 11.99 \stepcounter{equation}\tag{\theequation}
+\end{align*}
 
+\subsection{Memory Utilization}
+\label{app:sch1:mem_util}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=160mm]{figures/aa_scheme1_mem_util}
+	\caption{Scheme-1, Memory Utilization}
+	\label{fig:existing_analysis:aa_scheme1_mem_util}
+\end{figure}
+
+\subsection{Interface Utilization}
+\label{app:sch1:mem_util}
+The DGPMs are identical, thus only one DGPM's utilization is listed here.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=160mm]{figures/aa_scheme1_interface_util}
+	\caption{Scheme-1, Interface Utilization}
+	\label{fig:existing_analysis:aa_scheme1_interface_util}
+\end{figure}
+\begin{align*}
+	\label{equ:aa:scheme1:interface_util}
+	iCON1 \: output \: to \: PSM1 &= \#\frac{byte}{sample} * \#channel * range \: gate * frequency \\
+	&= 4 * 9 * 103 * 19.5kHz = 72.31 \: MB/s \\
+	DGPM \: input \: from \: PSM &= \frac{data \: rate}{\#DGPMs} = \frac{72.31}{6} = 12.05 \: MB/s \\[0.3cm]
+	CPU \: input &= \frac{DGPM \: data \: rate}{\#CPUs} = \frac{12.05}{2} = 6.02 \: MB/s \\[0.3cm]
+	DGPM \: output \: to \: PSM &= \frac{data \: rate}{\#DGPMs} = \frac{0.31}{6} = 0.0526 \: MB/s \\[0.3cm]
+	CPU \: output &= \frac{DGPM \: output}{\#CPUs} = \frac{0.0526}{2} = 0.026 \: MB/s \stepcounter{equation}\tag{\theequation}
+\end{align*}

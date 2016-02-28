@@ -56,54 +56,132 @@ Each CPU processes a Dwell of data. The processing results are dispatched to iCO
 	\label{fig:existing_analysis:aa_scheme1}
 \end{figure}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  SSUB-SECTION   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Scheduling of the Functional Blocks}
+\label{sss:scheme1:aa:sched_blocks}
+Scheduling functional blocks in the IMA processor architecture is shown in Figure \ref{fig:existing_analysis:aa_scheme1}. As discussed earlier, only odd numbered CPUs (CPU1,3,5...23) take part in processing A/A Mode algorithm.\\[0.3cm]
+\textsl{Core\#1} receives incoming data from the Ethernet and stores them into Core\#1's buffer memory in SDRAM. Then the data is copied to Core\#2's buffer memory.\\[0.2cm]
+%%%%%%
+\textsl{Core\#2} transfers the data from its buffer memory to storage memory to L2 cache and then performs Beamforming. The results of the processing are stored back to the core\#3's buffer memory in SDRAM.\\[0.2cm]
+%%%%%
+\textsl{Core\#3} reads the data from its SDRAM partition and performs Pulse Compression. The results of the processing are stored back to the SDRAM.\\[0.2cm]
+%%%%%%
+\textsl{Core\#4} gets the data from its SDRAM partition and performs FFT, CFAR, Correlation Processing. The results of the processing are stored back to the SDRAM.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  SSUB-SECTION   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{CPU Utilization}
 \label{sss:scheme1:aa:cpu_util}
-CPU utilization is the ratio of processing time to the available time. The worst case available time of a CPU is the time span between receiving two shortest Dwells by the CPU, calculated as 12x shortest Dwell time. The results reported here are rounded to two decimal places. The burst configurations and processor parameters are stated in the Chapter \ref{ss:aa_mode:radar_char}. As depicted in Figure \ref{fig:existing_analysis:aa_scheme1_cpu_util1}, 19\% of the Core1's time is utilized in worst-case scenario. Calculations for the first burst of the look direction-1 is explained for each profiling.
+CPU utilization is the ratio of processing time to the available time. The worst case available time of a CPU is the time span between receiving two shortest Dwells by the CPU, calculated as 12x shortest Dwell time. The results reported here are rounded to two decimal places. The burst configurations and processor parameters are stated in the Chapter \ref{ss:aa_mode:radar_char}. Calculations for the first burst of the look direction-1 is explained in Appendix \ref{app:ba:calc:scheme1}.
 
-Core1 receives incoming data from the Ethernet and stores them into Core1's buffer memory in SDRAM. Then the data is copied to Core2's buffer memory.
+%9.83%	11.68%	13.83%	16.32%	19.16%
+\begin{figure}
+\begin{minipage}{\linewidth}
+	\begin{minipage}{0.45\linewidth}
+		\resizebox {7cm} {!} {
+			\begin{tikzpicture}{width=7cm}
+			\begin{axis}[
+				x tick label style={/pgf/number format/1000 sep=},
+				ylabel=Core\#1 Utilization in \%,
+				xlabel=Look Direction,
+				enlargelimits=0.05,
+				legend style={at={(0.5,-0.1)},
+				anchor=north,legend columns=-1},
+				ybar interval=0.3,
+				ymin=0,ymax=100,
+				]
+			\addplot 
+				coordinates {(1, 9.83) (2, 11.68) (3, 13.83) (4, 16.32) (5, 19.16) (6, 19.16)};
+			\end{axis}
+			\end{tikzpicture}
+		}
+      \end{minipage}
+      \hspace{0.05\linewidth}
+      \begin{minipage}{0.45\linewidth}
+	 \resizebox {7cm} {!} {
+		\begin{tikzpicture}{width=5cm}
+		\begin{axis}[
+			x tick label style={/pgf/number format/1000 sep=},
+			ylabel=Core\#2 Utilization in \%,
+			xlabel=Look Direction,
+			enlargelimits=0.05,
+			legend style={at={(0.5,-0.1)},
+			anchor=north,legend columns=-1},
+			ybar interval=0.3,
+			ymin=0,ymax=100,
+			]
+		\addplot
+			coordinates {(1, 12.48) (2, 14.82) (3, 17.56) (4, 20.7) (5, 24.32) (6, 19.16)};
+		\end{axis}
+		\end{tikzpicture}
+		}
+	\end{minipage}
+\end{minipage}
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_1}
-	\caption{Scheme-1, Core1 Utilization}
-	\label{fig:existing_analysis:aa_scheme1_cpu_util1}
+\vspace*{2cm}
+\begin{minipage}{\linewidth}
+	\begin{minipage}{0.45\linewidth}
+		\resizebox {7cm} {!} {
+			\begin{tikzpicture}{width=7cm}
+			\begin{axis}[
+				x tick label style={/pgf/number format/1000 sep=},
+				ylabel=Core\#3 Utilization in \%,
+				xlabel=Look Direction,
+				enlargelimits=0.05,
+				legend style={at={(0.5,-0.1)},
+				anchor=north,legend columns=-1},
+				ybar interval=0.3,
+				ymin=0,ymax=100,
+				]
+			\addplot
+				coordinates {(1, 33.68) (2, 37.22) (3, 44.1) (4, 52.02) (5, 65.65) (6, 19.16)};
+			\end{axis}
+			\end{tikzpicture}
+		}
+      \end{minipage}
+      \hspace{0.05\linewidth}
+      \begin{minipage}{0.45\linewidth}
+	 \resizebox {7cm} {!} {
+		\begin{tikzpicture}{width=5cm}
+		\begin{axis}[
+			x tick label style={/pgf/number format/1000 sep=},
+			ylabel=Core\#4 Utilization in \%,
+			xlabel=Look Direction,
+			enlargelimits=0.05,
+			legend style={at={(0.5,-0.1)},
+			anchor=north,legend columns=-1},
+			ybar interval=0.3,
+			ymin=0,ymax=100,
+			]
+		\addplot
+			coordinates {(1, 43.9) (2, 50.21) (3, 58.67) (4, 64.53) (5, 75.58) (6, 19.16)};
+		\end{axis}
+		\end{tikzpicture}
+		}
+	\end{minipage}
+\end{minipage}
+\caption{Scheme-1, CPU Utilization}
+\label{ext_ana:sch1:cpu_util}
 \end{figure}
 
-Core2 transfers the data from its buffer memory to storage memory to L2 cache and then performs Beamforming. The results of the processing are stored back to the core3's buffer memory in SDRAM. As shown in Figure \ref{fig:existing_analysis:aa_scheme1_cpu_util2}, maximum utilization of Core2 reaches upto 24\% of the available time. The burst data input and data copy time are the same as the Equation \ref{aa:scheme1:core1:equ}. Every beamformed sample occupies 8 byte of memory.
-
-Core3 reads the data from its SDRAM partition and performs Pulse Compression. The results of the processing are stored back to the SDRAM. Taken from Figure \ref{fig:existing_analysis:aa_scheme1_cpu_util3}, maximum utilization of Core3 is 65\% of the available time. Time required to copy the input data and store back pulse compressed data are the same as the Equation \ref{aa:scheme1:core2:equ1}. The input data set [64 x 103] is zero padded to the next power of 2 [64 x 128] to perform 128-point convolution.
-
-
-\FloatBarrier
-Core4 gets the data from its SDRAM partition and performs FFT, CFAR, Correlation Processing. The results of the processing are stored back to the SDRAM. As mentioned in Figure \ref{fig:existing_analysis:aa_scheme1_cpu_util4}, maximum utilization of the Core4 is reaching 75\% of the available time.  Time required to copy the input data is same as the Equation \ref{aa:scheme1:core2:equ1}. FFT64 is chosen for Frequency Domain Transformation, as the corner turned data set size is [103 x 64].
-
-After Frequency Domain Transformation and Magnitude Calculation, The Sum channel and Guard channel data have 4 byte per magnitude sample, Azimuth channel and Elevation channel data have 8 byte per complex sample.
-
-
-
+CPU utilization is shown in Figure \ref{ext_ana:sch1:cpu_util} for each Core. On every Core, Look Direction-5 contributes to the highest(worst-case) processing time. It is evident from the figure that the Core\#1 and Core\#2 are utilized less than 25\%, meaning that the I/O processing and Beam-forming are not computation intensive. On the other hand, Core\#3 and Core\#4 are utilized 65\% and 75\% of the available time, meaning that there is very less room to adapt future growth. Core\#3 and Core\#4 violates the Radar processor requirements in terms of CPU utilization.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  SSUB-SECTION   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Processing Latency}
 \label{sss:scheme1:latency}
-Processing Latency is the time between reception of a Dwell and sending of processed result data. As listed in Table \ref{tbl:existing_analysis:aa_scheme1_latency}, processing latency between 333ms and 617ms is achieved depending on the look direction. In case of Active Electronically Scanned Array (AESA) Radar, processing latency influnces agility of the system. Beam steering is performed electronically in AESA Radar compared to the mechanical steering in conventional Radars. Dynamic carrier frequency and PRF characteristics of the AESA Radar makes it hard to be intercepted by Radar Warning Receiver. Derivation of Look direction-1's processing latency is explained below. 
-
-\begin{align*}
-	\label{aa:scheme1:latency}
-		Processing \: latency &= IO + Beamforming + Pulse \: compression  + FFT,CFAR,Correlation \\
-		&= 32.84 + 41.67 + 112.51 + 146.65 = 333.67 \: ms \\[0.3cm]
-		\#Dwell \: latency &= \frac{processing \: latency}{dwell \: time} = \frac{333.67}{27.84} = 11.99 \stepcounter{equation}\tag{\theequation}
-\end{align*}
+Processing Latency is the time between reception of a Dwell and sending of processed result data. As listed in Table \ref{tbl:existing_analysis:aa_scheme1_latency}, processing latency between 333ms and 617ms is achieved depending on the Look Direction.  Derivation of Look Direction-1's processing latency is explained in Appendix \ref{app:sch1:proc_late}. Number of Dwells the Radar can transmit, while the processor is busy in performing computations of a first received Dwell, is given as \textsl{\#Dwells transmitted}. Higher the \textsl{\#Dwells transmitted} implies that higher the stagnation of received echoes, which decreases the Radar processors response time. According to the Radar processor requirements, \textsl{\#Dwells transmitted} should be less than 2.
 
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{|c|l|l|l|} 
 	 \hline
-	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwell latency} \\
+	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwells transmitted} \\
 	 \hline
 	 1 & 27.84 & 333.67 & 11.99 \\ \hline
 	 2 & 33.07 & 380.61 & 11.51 \\ \hline
@@ -120,47 +198,23 @@ Processing Latency is the time between reception of a Dwell and sending of proce
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Memory Utilization}
 \label{sec:scheme1:mem_util}
-Each CPU has 4GiB of externally connected SDRAM. It is assumed that 3GiB are allocated for OS, storing executable code, etc. 1GiB are available for the actual data processing. Input and output data size for the cores are explained in each core's CPU utilization section. Figure \ref{fig:existing_analysis:aa_scheme1_mem_util} shows that 7\% of the available capacity is sufficient for A/A Mode processing.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=160mm]{figures/aa_scheme1_mem_util}
-	\caption{Scheme-1, Memory Utilization}
-	\label{fig:existing_analysis:aa_scheme1_mem_util}
-\end{figure}
+Each CPU has 4GiB of externally connected SDRAM. It is assumed that 3GiB are allocated for OS, storing executable code, etc. 1GiB are available for the actual data processing. Input and output data size for the cores and calculation of the memory requirement are shown Appendix \ref{app:sch1:mem_util}. According to the estimation, 7\% of the available capacity is sufficient for A/A Mode processing.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  SSUB-SECTION   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Interface Utilization}
 \label{sec:scheme1:aa_interface_util}
-Interfaces are the data routing paths in the Radar processor. Nominal bandwidth of 100MiB/s data rate is assumed for the interfaces. The DGPMs are identical, thus only one DGPM's utilization is listed here. As calculated in Figure \ref{fig:existing_analysis:aa_scheme1_interface_util}, peak interface utilization is inferred as 72\%.
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=160mm]{figures/aa_scheme1_interface_util}
-	\caption{Scheme-1, Interface Utilization}
-	\label{fig:existing_analysis:aa_scheme1_interface_util}
-\end{figure}
-
-\begin{align*}
-	\label{equ:aa:scheme1:interface_util}
-	iCON1 \: output \: to \: PSM1 &= \#\frac{byte}{sample} * \#channel * range \: gate * frequency \\
-	&= 4 * 9 * 103 * 19.5kHz = 72.31 \: MB/s \\
-	DGPM \: input \: from \: PSM &= \frac{data \: rate}{\#DGPMs} = \frac{72.31}{6} = 12.05 \: MB/s \\[0.3cm]
-	CPU \: input &= \frac{DGPM \: data \: rate}{\#CPUs} = \frac{12.05}{2} = 6.02 \: MB/s \\[0.3cm]
-	DGPM \: output \: to \: PSM &= \frac{data \: rate}{\#DGPMs} = \frac{0.31}{6} = 0.0526 \: MB/s \\[0.3cm]
-	CPU \: output &= \frac{DGPM \: output}{\#CPUs} = \frac{0.0526}{2} = 0.026 \: MB/s \stepcounter{equation}\tag{\theequation}
-\end{align*}
-\FloatBarrier
+Interfaces are the data routing paths in the Radar processor. Nominal bandwidth of 100MiB/s data rate is assumed for the interfaces.  Peak interface utilization is calculated as 72\% of the available 100MiB/s. The calculations are listed in Appendix \ref{fig:existing_analysis:aa_scheme1_interface_util}.
 
 \subsubsection{Summary}
-The CPUs in the DGPM are physically separated for A/A Mode and A/G Mode; accordingly the results will not change if the Radar processor is performing both the modes simultaneously. Space partitioning has 12x Dwell latency, utilizing 7\% of the available memory, 72\% of the interface and the following CPU utilization factors.
+The CPUs in the DGPM are physically separated for A/A Mode and A/G Mode; accordingly the results will not change if the Radar processor is performing both the modes simultaneously. Space partitioning has 12x Dwell latency, utilizing 7\% of the available memory, 72\% of the interface and the following CPU utilization factors. Scheme-1 scheduling technique violates the requirements of the Radar processor in terms of processing latency, hence it is not applicable for real-time processing.
 
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{|l|l|l|l|l|} 
 	 \hline
-	& \textbf{Core1} & \textbf{Core2} & \textbf{Core3} & \textbf{Core4} \\ \hline
+	& \textbf{Core\#1} & \textbf{Core\#2} & \textbf{Core\#3} & \textbf{Core\#4} \\ \hline
 	\textbf{Utilization} & 19.16\% & 24.32\% & 65.65\% & 75.58\% \\ \hline
 	\end{tabular}
 	\caption{Scheme-1, CPU Utilization}
@@ -176,7 +230,7 @@ The CPUs in the DGPM are physically separated for A/A Mode and A/G Mode; accordi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Scheme 2 - Time Partitioning}
 \label{sec:scheme2}
-This section explains the formulas and calculations in the excel document provided by Airbus DS. Every CPU runs both the A/A mode and A/G mode application concurrently. CPU time and resources are shared for both the applications. Memory is partitioned for each mode to provide segregation. This analysis assumes
+Every CPU in the IMA processor architecture runs both the A/A mode and A/G mode application concurrently. CPU time and resources are shared for both the applications. Memory is partitioned for each mode to provide segregation. This analysis assumes
 \begin{compactitem}
 	\item All the four cores of a CPU can access SDRAM without interfering each other.
 	\item L2 cache is statically partitioned at compile time, partition values are stated in Figure \ref{fig:existing_analysis:scheme2_partition_values}.
@@ -221,7 +275,7 @@ Available time is 24x shortest Dwell time. Since the core is time sliced, effect
 	\centering
 	\begin{tabular}{|l|l|l|l|l|} 
 	 \hline
-	 & \textbf{Core1} & \textbf{Core2} & \textbf{Core3} & \textbf{Core4} \\ \hline
+	 & \textbf{Core\#1} & \textbf{Core\#2} & \textbf{Core\#3} & \textbf{Core\#4} \\ \hline
 	 \textbf{Core Utilization} & 25\% & 53\% & 71\% & 63\% \\ \hline
 	\end{tabular}
 	\caption{Scheme-2, CPU Utilization}
@@ -236,7 +290,7 @@ Processing latency is higher than Scheme-1 because a core gets approximately hal
 	\centering
 	\begin{tabular}{|c|l|l|l|} 
 	 \hline
-	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwell latency} \\
+	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwells transmitted} \\
 	 \hline
 	 1 & 27.84 & 640 & 22.99 \\ \hline
 	 2 & 33.07 & 700 & 21.17 \\ \hline
@@ -250,14 +304,7 @@ Processing latency is higher than Scheme-1 because a core gets approximately hal
 
 \subsubsection{Memory Utilization}
 \label{sss:scheme2:mem_util}
-Each CPU has 4GiB of externally connected SDRAM. It is assumed that 3GiB are allocated for OS, storing executable code, etc, 1GiB are available for data processing. As seen in Figure \ref{fig:existing_analysis:scheme2_aa_mem_util}, peak memory utilization reaches upto 9\% of the available memory.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=160mm]{figures/scheme2_aa_mem_util}
-	\caption{Scheme-2, Memory Utilization}
-	\label{fig:existing_analysis:scheme2_aa_mem_util}
-\end{figure}
+Each CPU has 4GiB of externally connected SDRAM. It is assumed that 3GiB are allocated for OS, storing executable code, etc, 1GiB are available for data processing. The peak memory utilization is calculated as 9\% of the available memory.
 
 \subsubsection{Interface Utilization}
 \label{sss:scheme2:interface_util}
@@ -265,5 +312,6 @@ Data distribution scheme is the extended version of Scheme-1, hence the peak int
 
 \subsection{Summary}
 \label{sss:scheme2:sar_summary}
-The Time Partition configuration has 23x Dwell time latency, utilizing 63\% of the CPU, 9\% of the memory and 72\% of the interface capability. Since every CPU is executing A/A mode processing as well as A/G mode processing, the combined results have to be taken into consideration to estimate peak values of the aforementioned profiling.
+The Time Partition configuration has 23x Dwell time latency, utilizing 63\% of the CPU, 9\% of the memory and 72\% of the interface capability. Scheme-2 also failed to fulfil the Radar processor requirement. Neither of the baseline analysis scheme satisfies the real-time requirements. A Radar processor, having 23x Dwell time processing latency is not a good choice for airborne Radar processor. Next chapters explain optimal scheduling schemes to bring down the processing latency to an acceptable level.
+
 

@@ -1,4 +1,4 @@
-\chapter{Mode Mapping}
+\chapter{Optimized Scheduling}
 \label{chap:mode_mapping}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11,7 +11,7 @@
 According to the A/A Mode processing chain, only Correlation Processing is dependent on the results of the 8 bursts of a dwell. The burst processing chain except the correlation processing has no dependency and can therefor performed independently. The previous 7 bursts. Rest of the processing steps do not have any dependency, thus can be performed independently. The final Correlation Processing shall be computed serially. Space Partition configuration is adopted for Scheme-3 implementation.
 
 \subsection{Data distribution}
-Burst processing comprises of Beamforming, Pulse Compression, FFT and CFAR processing. A burst processing CPU gets four bursts and executes one instance of burst processing per core. As shown in Figure \ref{fig:mm:scheme4_aa_mode_mapping}, CPU1...6 are allocated to processes four burst each and CPU7 executes four instances of Correlation Processing in four cores, performing one instance per core.
+Burst processing comprises of Beam-forming, Pulse Compression, FFT and CFAR processing. A burst processing CPU gets four bursts and executes one instance of burst processing per core. As shown in Figure \ref{fig:mm:scheme4_aa_mode_mapping}, CPU1...6 are allocated to process four burst each and CPU7 executes four instances of Correlation Processing in four cores, performing one instance per core.
 
 \begin{tabular}{rl}
 	No.of cores for burst processing: & 6 x 4 = 24 \\
@@ -48,7 +48,7 @@ The received A/A mode raw data will be processed as follows
 \end{figure}
 
 \subsection{Hypothesis}
-Incase of existing analysis, as illustrated in Figure \ref{fig:mm:scheme4_data_distribution}, beamforming of the first burst will start only after receiving a complete dwell. Though the first burst is ready for Beamforming, redundant time is spent in waiting for the complete dwell data. This applies to the Pulse Compression, FFT, and CFAR processing also.
+In case of the baseline analysis, as illustrated in Figure \ref{fig:mm:scheme4_data_distribution}, beam-forming of the first burst will start only after receiving a complete dwell. Though the first burst is ready for Beam-forming, redundant time is spent in waiting for the complete dwell data. This applies to the Pulse Compression, FFT, and CFAR processing also.
 
 \begin{figure}[h!]
 	\centering
@@ -57,8 +57,8 @@ Incase of existing analysis, as illustrated in Figure \ref{fig:mm:scheme4_data_d
 	\label{fig:mm:scheme4_comparison}
 \end{figure}
 
-Scheme-3 exploits the fact that every burst can be processed independently until the Thresholding and Detection stage. Every burst is sent to an individual core to process them conveniently as soon as they are received. This saves waiting time during Data receive period, Beamforming, Pulse compression, FFT and CFAR processing. Nothing has changed in terms of Correlation Processing, hence it will not contribute to the latency reduction.\\[0.2cm]
-Another difference between Scheme-1 and Scheme-3 is the amount of data processed by a CPU. Scheme-1 performs 8 bursts processing whereas Scheme-4 performs 4 bursts processing per CPU. This decreases memory requirement and memory transfer bandwidth compared to the Scheme-1.
+Scheme-3 exploits the fact that every burst can be processed independently until the Thresholding and Detection stage. Every burst is sent to an individual core to process them conveniently as soon as they are received. This saves waiting time during Data receive period, Beam-forming, Pulse compression, FFT and CFAR processing. Nothing has changed in terms of Correlation Processing, hence it will not contribute to the latency reduction.\\[0.2cm]
+Another difference between Scheme-1 and Scheme-3 is the amount of data processed by a CPU. Scheme-1 performs 8 bursts processing whereas Scheme-3 performs 4 bursts processing per CPU. This decreases memory requirement and memory transfer bandwidth compared to the Scheme-1.
 
 \subsection{Processing Latency}
 \label{ss:mm:scheme4:latency}
