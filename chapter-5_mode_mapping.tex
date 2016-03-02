@@ -16,7 +16,7 @@ In case of the baseline analysis, as illustrated in Figure \ref{fig:mm:scheme4_d
 
 Scheme-3 exploits the fact that every burst can be processed independently until the Thresholding and Detection stage. Every burst is sent to an individual core to process them conveniently as soon as they are received. This saves waiting time during Data receive period, Beam-forming, Pulse compression, FFT and CFAR processing. Nothing has changed in terms of Correlation Processing, hence it will not contribute to the latency reduction.
 
-\subsection{Data distribution}
+\subsection{Scheduling of the Functional Blocks}
 As shown in Figure \ref{fig:mm:scheme4_aa_mode_mapping}, CPU1...6 are allocated for burst processing and CPU7 executes four instances of Correlation Processing in four cores, performing one instance per core. Burst processing comprises of Beam-forming, Pulse Compression, FFT and CFAR processing. A burst processing CPU gets four bursts and executes one instance of burst processing per core.
 
 \begin{tabular}{rl}
@@ -64,55 +64,23 @@ Another difference between Scheme-1 and Scheme-3 is the amount of data processed
 
 \subsection{Processing Latency}
 \label{ss:mm:scheme4:latency}
-Processing latency is measured on a real hardware clocked 1GHz and the results are scaled down to 800MHz. Data transfer time of 0.02ms is assumed between CPU1...6 and CPU7. Total time required to process one burst until Thresholding and Detection stage is same as Scheme-1, the differences here are 
-
-\begin{compactitem}
-	\item Four bursts are distributed to a CPU.
-	\item OS overhead factor is removed.
-	\item Data copy times among the cores are ignored, as the Time Domain Processing, Frequency Domain Processing and Detection Processing of a burst are performed in individual cores.
-	\item The \textsl{Sum of required time} values in Figure \ref{fig:mm:scheme4_elapsed_time} are different from Scheme-1 because the execution cycle of the benchmarks are evaluated and updated (see Chapter \ref{mm:cons:exe_cyl_mismatch}).
-\end{compactitem}
-\vspace*{0.2cm}
-Processing latency calculations are same as explained in Chapter \ref{sss:scheme1:aa:cpu_util}. Details of the look direction2,3,4 are not shown for simplicity.
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=140mm]{figures/scheme4_io}
-	\includegraphics[width=140mm]{figures/scheme4_bf}
-	\includegraphics[width=140mm]{figures/scheme4_pc}
-	\caption{Scheme-3, Input Output, Beamforming and Pulse Compression}
-	\label{fig:mm:scheme4_io}
-\end{figure}
-
-The stated values in Figure \ref{fig:mm:scheme4_fft} say that the look direction-1, PRF1 needs 35.72ms time to complete the execution from the moment a core starts receiving a burst. Elapsed wall clock time to process burst by burst is listed as \textsl{Time spent} in the Figure \ref{fig:mm:scheme4_elapsed_time}. Example calculations for the look direction-1 are explained here with reference to the Figure \ref{fig:mm:scheme4_timeline_burst_proc}. A core waits for the pre-defined burst data to be received, i.e. a core processing PRF5 should wait till the PRF1...5 are distributed by the iCON. Burst receive time are derived from the Radar characteristics (see Chapter \ref{ss:aa_mode:radar_char}). PRF7 requires lesser time to process a burst than PRF6, because N$_{rg}$=59 for PRF7, requires 64-point(next power of 2) convolution, on the other hand N$_{rg}$=68 for PRF6, requires 128-point convolution.
+Processing latency is measured on a real hardware clocked 1GHz and the results are scaled down to 800MHz. Data transfer time of 0.02ms is assumed between CPU1...6 and CPU7. Processing latency calculations of every core is shown in Appendix \ref{app:sch3:calc}. Figure \ref{fig:mm:scheme3_req_time} shows the latency components corresponds to PRF1, Look Direction-1.  Table \ref{fig:mm:scheme4_elapsed_time} summarizes the time required to process one burst until Thresholding and Detection stage.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=140mm]{figures/scheme4_fft}
-	\caption{Scheme-3, FFT and CFAR Processing}
-	\label{fig:mm:scheme4_fft}
+	\includegraphics[width=145mm]{figures/scheme3_req_time}
+	\caption{Scheme-3, Burst Processing time for PRF1, Look Direction-1}
+	\label{fig:mm:scheme3_req_time}
 \end{figure}
 
-\begin{figure}[h!]
+The stated values in the table say that the look direction-1, PRF1 needs 35.72ms time to complete the execution from the moment a core starts receiving a burst. Elapsed wall clock time to process burst by burst is listed as \textsl{Time spent[ms]}. Example calculations for the look direction-1 are explained here with reference to the Figure \ref{fig:mm:scheme4_timeline_burst_proc}. A core waits for the pre-defined burst data to be received, i.e. a core processing PRF5 should wait till the PRF1...5 are distributed by the iCON. Burst receive time are derived from the Radar characteristics (see Chapter \ref{ss:aa_mode:radar_char}).
+
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/scheme4_elapsed_time}
 	\caption{Scheme-3, Processing Time}
 	\label{fig:mm:scheme4_elapsed_time}
-\end{figure}
-
-\begin{align*}
-	Elapsed \: time &= MAX((Previous \: burst \: receive \: time + Execution \: time), Elapsed \: time)\\
-	PRF1 &= MAX((0 + 35.72), 0) = 35.72 \: ms\\
-	PRF2 &= MAX((PRF1 \: receive \: time + Execution \: time), Elapsed \: time) \\
-		&= MAX((3.28 + 45.78), 35.72) = 49.07 \: ms \\	 
-	PRF3 &= MAX((PRF1...2 \: receive \: time + Execution \: time), Elapsed \: time) \\	
-		&= MAX((3.28 + 3.50 + 44.7),49.07) = 51.47 \: ms \\
-	PRF4 &= MAX((3.28 + 3.50 + 3.44 + 45.69), 51.47) = 55.90 \: ms \\
-	PRF5 &= MAX((3.28 + 3.50 + 3.44 + 3.53 + 46.73), 55.90) = 60.48 \: ms \\
-	PRF6 &= MAX((3.28 + 3.50 + 3.44 + 3.53 + 3.63 + 46.72), 60.48) = 64.09 \: ms \\ 
-	PRF7 &= MAX((3.28 + 3.50 + 3.44 + 3.53 + 3.63 + 3.57 + 34.23), 64.09) = 64.09 \: ms \\	
-	PRF8 &= MAX((3.28 + 3.50 + 3.44 + 3.53 + 3.63 + 3.57 + 3.46 + 44.57), 64.09) \\
-		&= 68.98 \: ms	\stepcounter{equation}\tag{\theequation}
-\end{align*}
+\end{table}
 
 \begin{figure}[h!]
 	\centering
@@ -121,18 +89,45 @@ The stated values in Figure \ref{fig:mm:scheme4_fft} say that the look direction
 	\label{fig:mm:scheme4_timeline_burst_proc}
 \end{figure}
 
+%\setlength{\belowdisplayskip}{2pt} \setlength{\belowdisplayshortskip}{2pt}
+%\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
+\begin{align*}
+	T_{el} &= MAX((T_{pb} + T_{ex}), T_{el})\\
+	PRF1 &= MAX((0 + 35.72), 0) = 35.72 \: ms\\
+	PRF2 &= MAX((3.28 + 45.78), 35.72) = 49.07 \: ms \\	 
+	PRF3 &= MAX((3.28 + 3.50 + 44.7),49.07) = 51.47 \: ms \\
+		& \: \: . \\
+		& \: \: . \\
+		& \: \: . \\	
+	PRF8 &= MAX((3.28 + 3.50 + 3.44 + 3.53 + 3.63 + 3.57 + 3.46 + 44.57), 64.09) \\
+		&= 68.98 \: ms	\stepcounter{equation}\tag{\theequation}
+\end{align*}
+\noindent 
+\textbf{Legend}\\
+\tab $T_{el}:$ Elapsed time \\
+\tab $T_{ex}:$ Execution time \\
+\tab $T_{pb}:$ Previous burst receive time\\
+
+
 Data transfer time of 0.02ms between burst processing CPUs and correlation processing CPU, and 0.2ms between correlation processing CPU and tracking/display processor is assumed.
 \begin{align*}
-	Latency &= Burst \: processing + Data \: transfer \: to \: CPU7 + Correlation \: processing \\
-		& \qquad + Transfer \: results  \\
+	T_{l} &= T_{bp} + T_{dt} + T_{cp} + T_{tr}  \\
 		&= 68.98 + 0.02 + 43.34 + 0.2 = 112.5 \: ms  \stepcounter{equation}\tag{\theequation}
 \end{align*}
+\noindent 
+\textbf{Legend}\\
+\tab $T_{l}:$ Processing latency \\
+\tab $T_{bp}:$ Burst processing time \\
+\tab $T_{dt}:$ Data transfer time from CPU1...6 to CPU7\\
+\tab $T_{cp}:$ Correlation processing time \\
+\tab $T_{tr}:$ Result transfer time from CPU7 to Tracking/Display processor \\
+
 The processing latency between 112.52ms and 174.58ms are achieved depending on the look direction. Table \ref{tbl:mm:scheme4_latency} lists the processing latency of every look direction.
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{|c|l|l|l|} 
 	 \hline
-	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwell latency} \\
+	 \textbf{Look direction} & \textbf{Dwell time[ms]} & \textbf{Latency[ms]} & \textbf{\#Dwells transmitted} \\
 	 \hline
 	 1 & 27.84 & 112.52 & 4.04 \\ \hline
 	 2 & 33.07 & 122.18 & 3.69 \\ \hline
@@ -145,23 +140,32 @@ The processing latency between 112.52ms and 174.58ms are achieved depending on t
 \end{table}
 \FloatBarrier
 
-\subsection{CPU Load}
+\subsection{CPU Utilization}
 \label{ss:mm:scheme4:cpu_load}
-CPU load is the ratio of processing time to the available time. 6 CPUs are involved in A/A mode processing; meaning 24 cores are processing 24 burst (3 dwell) data. Available time is 3x dwell time. From the Figure \ref{fig:mm:scheme4_util}, maximum core utilization can reach up to 66\%. Calculations for the look direction-1, PRF1 are explained here.
+CPU utilization is the ratio of processing time to the available time. 6 CPUs are involved in A/A mode processing; meaning 24 cores are processing 24 burst (3 dwell) data. Available time is 3x dwell time. Utilization of each core per look direction is listed in Appendix \ref{fig:mm:scheme4_util}. Summarized utilization result is presented in Figure \ref{sch3:chrt:cpu_util}. From the figure, it can be seen that the maximum core utilization reaches up to 66\%.
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=140mm]{figures/scheme4_util}
-	\caption{Scheme-3, CPU Utilization}
-	\label{fig:mm:scheme4_util}
+\centering
+\resizebox {11cm} {!} {
+		\begin{tikzpicture}{}
+		\begin{axis}[
+			x tick label style={/pgf/number format/1000 sep=},
+			ylabel=Max.Core Utilization in \%,
+			xlabel=Look Direction,
+			enlargelimits=0.05,
+			legend style={at={(0.5,-0.1)},
+			anchor=north,legend columns=-1},
+			ybar interval=0.3,
+			ymin=0,ymax=100,
+			]
+		\addplot
+			coordinates {(1, 56) (2, 54) (3, 65) (4, 63) (5, 60) (6, 19.16)};
+		\end{axis}
+		\end{tikzpicture}
+}
+\caption{Scheme-3, CPU Utilization}
+\label{sch3:chrt:cpu_util}
 \end{figure}
-
-\begin{align*}
-	Required \: time &= 35.72 \: ms \\
-	Available \: time &= 3 * dwell \: time = 3 * 27.84 = 82.2\: ms \\
-	Utilization &= \frac{Required \: time}{Available \: time} = \frac{35.72}{82.2} = 43.4\% \stepcounter{equation}\tag{\theequation}
-\end{align*}
-
-\clearpage
+		
 \subsubsection{Utilization of Correlation Processing CPU}
 \label{mm:SSS:scheme4:corr_cpu_util}
 Updated correlation processing time values are listed in Figure \ref{fig:mm:scheme4_corr_calc}. The calculations are the same as used in Scheme-1, the difference is that the operating system overhead factor is removed from the analysis.

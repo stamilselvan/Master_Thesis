@@ -76,7 +76,7 @@ Scheduling functional blocks in the IMA processor architecture is shown in Figur
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{CPU Utilization}
 \label{sss:scheme1:aa:cpu_util}
-CPU utilization is the ratio of processing time to the available time. The worst case available time of a CPU is the time span between receiving two shortest Dwells by the CPU, calculated as 12x shortest Dwell time. The results reported here are rounded to two decimal places. The burst configurations and processor parameters are stated in the Chapter \ref{ss:aa_mode:radar_char}. Calculations for the first burst of the look direction-1 is explained in Appendix \ref{app:ba:calc:scheme1}.
+CPU utilization is the ratio of processing time to the available time. The worst case available time of a CPU is the time span between receiving two shortest Dwells by the CPU, calculated as 12x shortest Dwell time. The results reported here are rounded to two decimal places. The burst configurations and processor parameters are stated in the Chapter \ref{ss:aa_mode:radar_char}. Calculations for the first burst of the look direction-1 is explained in Appendix \ref{app:ba:calc:scheme1}. 
 
 %9.83%	11.68%	13.83%	16.32%	19.16%
 \begin{figure}
@@ -176,6 +176,15 @@ CPU utilization is shown in Figure \ref{ext_ana:sch1:cpu_util} for each Core. On
 \subsubsection{Processing Latency}
 \label{sss:scheme1:latency}
 Processing Latency is the time between reception of a Dwell and sending of processed result data. As listed in Table \ref{tbl:existing_analysis:aa_scheme1_latency}, processing latency between 333ms and 617ms is achieved depending on the Look Direction.  Derivation of Look Direction-1's processing latency is explained in Appendix \ref{app:sch1:proc_late}. Number of Dwells the Radar can transmit, while the processor is busy in performing computations of a first received Dwell, is given as \textsl{\#Dwells transmitted}. Higher the \textsl{\#Dwells transmitted} implies that higher the stagnation of received echoes, which decreases the Radar processors response time. According to the Radar processor requirements, \textsl{\#Dwells transmitted} should be less than 2.
+
+Time required to process a complete Dwell relate to the look direction-1 is shown in Figure \ref{fig:mm:scheme1_latency_tot}.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=145mm]{figures/scheme1_latency_tot}
+	\caption{Scheme-1, Dwell Processing time of Look Direction-1}
+	\label{fig:mm:scheme1_latency_tot}
+\end{figure}
+
 
 \begin{table}[h!]
 	\centering
@@ -285,6 +294,14 @@ Available time is 24x shortest Dwell time. Since the core is time sliced, effect
 \subsubsection{Processing Latency}
 \label{sss:scheme2:latency}
 Processing latency is higher than Scheme-1 because a core gets approximately half of the available time for A/A Mode processing. Processing latency between 640ms and 1100ms is achieved depending on the look direction, which is also listed in Table \ref{tbl:existing_analysis:aa_scheme2_latency}.
+
+Time required to process a complete Dwell relate to the look direction-1 is shown in Figure \ref{fig:mm:scheme2_latency_tot}.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=145mm]{figures/scheme2_latency_tot}
+	\caption{Scheme-2, Dwell Processing time of Look Direction-1}
+	\label{fig:mm:scheme2_latency_tot}
+\end{figure}
 
 \begin{table}[h!]
 	\centering

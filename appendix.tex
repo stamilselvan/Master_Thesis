@@ -308,3 +308,34 @@ The DGPMs are identical, thus only one DGPM's utilization is listed here.
 	DGPM \: output \: to \: PSM &= \frac{data \: rate}{\#DGPMs} = \frac{0.31}{6} = 0.0526 \: MB/s \\[0.3cm]
 	CPU \: output &= \frac{DGPM \: output}{\#CPUs} = \frac{0.0526}{2} = 0.026 \: MB/s \stepcounter{equation}\tag{\theequation}
 \end{align*}
+
+\chapter{Scheme-3 Calculations}
+\label{app:sch3:calc}
+
+\section{IO Processing}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=140mm]{figures/scheme4_io}
+	\includegraphics[width=140mm]{figures/scheme4_bf}
+	\includegraphics[width=140mm]{figures/scheme4_pc}
+	\caption{Scheme-3, Input Output, Beamforming and Pulse Compression}
+	\label{fig:mm:scheme4_io}
+\end{figure}
+
+\section{FFT and CFAR Processing}
+\FloatBarrier
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=140mm]{figures/scheme4_fft}
+	\caption{Scheme-3, FFT and CFAR Processing}
+	\label{fig:mm:scheme4_fft}
+\end{figure}
+
+\section{CPU Utilization}
+\label{app:sch3:cpu_util}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=140mm]{figures/scheme4_util}
+	\caption{Scheme-3, CPU Utilization}
+	\label{fig:mm:scheme4_util}
+\end{figure}
