@@ -169,12 +169,12 @@ done
 
 \section{Scheme-1}
 \subsection{Utilization of Core\#1}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_1}
 	\caption{Scheme-1, Core\#1 Utilization}
 	\label{fig:existing_analysis:aa_scheme1_cpu_util1}
-\end{figure}
+\end{table}
 \begin{align*}
 	\label{aa:scheme1:core1:equ}
 	Burst \enspace data \enspace input & = 64 pulses \enspace * \enspace 103 \frac{range gates}{pulse} \enspace * \enspace 9channel * 4\frac{byte}{sample}\\[0.3cm]
@@ -186,12 +186,12 @@ done
 \end{align*}
 
 \subsection{Utilization of Core\#2}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_2}
 	\caption{Scheme-1, Core\#2 Utilization}
 	\label{fig:existing_analysis:aa_scheme1_cpu_util2}
-\end{figure}
+\end{table}
 \begin{align*}
 \label{aa:scheme1:core2:equ1}
 	SDRAM \: to \: L2cache \: time &= 237,312 byte \, * \, 2.29\frac{cycle}{byte} \, * \, 1.25\frac{ns}{cycle} = 0.68 \, ms \\[0.3cm]
@@ -205,12 +205,12 @@ done
 
 
 \subsection{Utilization of Core\#3}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/aa_scheme1_cpu_util_3}
 	\caption{Scheme-1, Core\#3 Utilization}
 	\label{fig:existing_analysis:aa_scheme1_cpu_util3}
-\end{figure}
+\end{table}
 \begin{align*}
 	\label{aa:scheme1:core3:equ}
 	Pulse \: compression &= \bigg(\#channel * \#pulses (CONV128 +  \# \frac{range gates}{pulse} * RMY50)\bigg)\\[0.3cm]  
@@ -228,12 +228,12 @@ done
 	&= \enspace 3.29ms  \stepcounter{equation}\tag{\theequation} 
 \end{align*}
 
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=150mm]{figures/aa_scheme1_cpu_util_4}
 	\caption{Scheme-1, Core\#4 Utilization}
 	\label{fig:existing_analysis:aa_scheme1_cpu_util4}
-\end{figure}
+\end{table}
 
 \begin{align*}
 	\label{aa:scheme1:core4:equ2}
@@ -283,22 +283,22 @@ done
 
 \subsection{Memory Utilization}
 \label{app:sch1:mem_util}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/aa_scheme1_mem_util}
 	\caption{Scheme-1, Memory Utilization}
 	\label{fig:existing_analysis:aa_scheme1_mem_util}
-\end{figure}
+\end{table}
 
 \subsection{Interface Utilization}
 \label{app:sch1:mem_util}
 The DGPMs are identical, thus only one DGPM's utilization is listed here.
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/aa_scheme1_interface_util}
 	\caption{Scheme-1, Interface Utilization}
 	\label{fig:existing_analysis:aa_scheme1_interface_util}
-\end{figure}
+\end{table}
 \begin{align*}
 	\label{equ:aa:scheme1:interface_util}
 	iCON1 \: output \: to \: PSM1 &= \#\frac{byte}{sample} * \#channel * range \: gate * frequency \\
@@ -313,29 +313,161 @@ The DGPMs are identical, thus only one DGPM's utilization is listed here.
 \label{app:sch3:calc}
 
 \section{IO Processing}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/scheme4_io}
 	\includegraphics[width=140mm]{figures/scheme4_bf}
 	\includegraphics[width=140mm]{figures/scheme4_pc}
 	\caption{Scheme-3, Input Output, Beamforming and Pulse Compression}
 	\label{fig:mm:scheme4_io}
-\end{figure}
+\end{table}
 
 \section{FFT and CFAR Processing}
-\FloatBarrier
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/scheme4_fft}
 	\caption{Scheme-3, FFT and CFAR Processing}
 	\label{fig:mm:scheme4_fft}
-\end{figure}
+\end{table}
+\FloatBarrier
 
 \section{CPU Utilization}
 \label{app:sch3:cpu_util}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/scheme4_util}
 	\caption{Scheme-3, CPU Utilization}
 	\label{fig:mm:scheme4_util}
+\end{table}
+
+\section{Correlation Processing CPU Utilization}
+\label{app:sch4:corr_cpu_util}
+\begin{table}[h!]
+	\centering
+	\includegraphics[width=160mm]{figures/scheme4_corr_proc}
+	\caption{Scheme-3, Execution Time of Correlation Processing}
+	\label{fig:mm:scheme4_corr_calc}
+\end{table}
+
+
+\chapter{Scheme-4}
+\label{app:sch4}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\section{M/N BIV - Pseudo Code}
+\begin{algorithm}
+\caption{Pseudocode - Binary Integration of Velocity\cite{fcas}.}
+\label{mm:biv:pseudo_code}
+\begin{algorithmic}[1]
+	\Require 
+		\Statex \texttt{M$_v$:} Binary integration threshold from constant table
+		\Statex \texttt{W$_{size}$:} Velocity window size from constant table
+		\Statex \texttt{RCI} and \texttt{CMV} from previous processing steps
+	\Ensure
+		\Statex Updated \texttt{RCI}
+		\Statex
+
+	\LState \texttt{b\_ref = burst\_id;}
+	\LState \texttt{n\_rc = RCI.N$_{rc}$}
+	\For{\texttt{n:=1 to n\_rc}}
+		\LState \texttt{ai\_ref = RCI.RCI\_PREV[n].AI;}
+		\LState \texttt{n\_burst = RCI.RCI\_PREV[n].N$_{bc}$;}
+		\LState \texttt{best\_count = M$_v$-1;}
+		\LState \texttt{best\_v = 0;}
+		\LState \texttt{count = 0;}
+		
+		\For{\texttt{ref\_unf:=1 to CMV.CMV\_PREV[b\_ref].AI[ai\_ref].N$_{unf}$}}
+			\LState \texttt{v\_ref = CMV.CMV\_PREV[b\_ref].AI[ai\_ref].V[ref\_unf];}
+			
+			\For{\texttt{m:=1 to n\_bursts}}
+				\LState \texttt{b\_cmp = RCI.RCI\_PREV[n].BI[m].BID;}
+				\LState \texttt{ai\_cmp = RCI.RCI\_PREV[n].BI[m].AL;}
+				\LState \texttt{cmp\_unf =  CMV.CMV\_PREV[b\_cmp].AI[ai\_cmp].N$_{unf}$;}
+				
+				\For{\texttt{k:=1 to cmp\_unf}}
+					\LState \texttt{v\_cmp = CMV.CMV\_PREV[b\_cmp].AI[ai\_cmp].V[k];}
+					\LState \texttt{diff\_v = v\_cmp - v\_ref;}
+					
+					\If{\texttt{((diff\_v <= W$_{size}$) \&\& (sign(v\_cmp)==sign(v\_ref)))}}
+						\LState \texttt{count = count +1;}
+						\LState \textbf{break } \texttt{for;}
+					\EndIf
+				\EndFor
+			\EndFor
+			\If{\texttt{(count > best\_count)}}
+				\LState \texttt{best\_count = count;}
+				\LState \texttt{best\_v = v\_ref;}
+			\EndIf
+		\EndFor
+		\LState \texttt{RCI.RCI\_PREV[n].V = best\_v;}
+		\LState \texttt{RCI.RCI\_PREV[n].Q$_v$ = count;}
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+Data structures of the Range Correlation Information(RCI) and Correlation Matrix Velocity(CMV) are depicted in Figure \ref{fig:mm:biv_struct}. These two data structures are the results of previous correlation processing steps namely Monopulse measurement, Range unfolding, M/N range integration and Velocity unfolding.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=90mm]{figures/biv_struct1}
+	\includegraphics[width=90mm]{figures/biv_struct2}
+	\caption{Structure of RCI and CMV}
+	\label{fig:mm:biv_struct}
 \end{figure}
+
+\section{Utilization - Burst Processing CPUs}
+\label{app:sch4_cpu_util}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=160mm]{figures/scheme5_cpu_util1}
+	\caption{Scheme-4, CPU Utilization (1/2)}
+	\label{fig:mm:scheme5_cpu_util1}
+\end{figure}
+Nothing has changed in I/O processing and Burst data input of the Beamforming. CPU time spent on processing is explained for PRF1, look direction-1. Listed calculations illustrate one channel processing per core, as shown in the data dependency diagram \ref{fig:mm:scheme5_data_path}.
+
+\begin{align*}
+\label{aa:scheme5:equ1}
+	SDRAM \: to \: L2cache &= 237,312 byte \, * \, 2.18\frac{cycle}{byte} \, * \, 1.25\frac{ns}{cycle} = 0.65 \: ms \\[0.3cm]
+	Beamforming &= 1channel * 64pulses * 103 \frac{range gates}{pulse} * 287\frac{cycle}{8 element} \\[0.3cm] 
+	&\qquad * 1.25\frac{ns}{cycle} = 2.36 \: ms\\[0.3cm]
+	Beamformed \: data &= 1channel * 64pulses * 103 \frac{range gates}{pulse} *8\frac{byte}{sample} = 52,736 \: byte \\[0.3cm]
+	L2cache \: to \: SDRAM &= 52,736 byte \, * \, 2.18\frac{cycle}{byte} \, * \, 1.25\frac{ns}{cycle} = 0.14 \: ms \\
+	Pulse \: compression &= \bigg(\#channel * \#pulses (CONV128 +  \# \frac{range gates}{pulse} * RMY50)\bigg) \\
+			& \quad * cycle \: time \\
+			&= (1 * 64 (27300 + 103 * 68)) * 1.25ns = 2.74 \: ms \stepcounter{equation}\tag{\theequation} 
+\end{align*}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=160mm]{figures/scheme5_cpu_util2}
+	\caption{Scheme-4, CPU Utilization (2/2)}
+	\label{fig:mm:scheme5_cpu_util2}
+\end{figure}
+
+\begin{align*}
+	FDP \: time &= \bigg(1channel * (\#pulses * \# \frac{RG}{pulse} (COT50 + RMY50) + \# \frac{RG}{pulse} * \\
+		& \qquad FFT64) + 1 * (\# \frac{range gates}{pulse} * 64 * MAG256)\bigg) * cycle \, time \\[0.3cm]
+		&= (1 * (64 * 103 (98 + 68) + 103 * 2550) + 1 * (103 * 64 * 41)) * 1.25ns \\
+		&= \enspace 2.03 \: ms \\
+		Average \: Calculation &= 1channel * 103 \frac{range gates}{pulse} * 64(FFTsize) * 51(AVG100) * 2 \\
+		&=  672,384 \: cycle \\
+		Thresholding &= 1channel * 103 \frac{range gates}{pulse} * 64(FFTsize) * 55(CMPR100) \\
+		&= 362,560 \: cycle \\
+		Detection &= 103 \frac{range gates}{pulse} * 64(FFTsize) * 97(DET100) = 639,424 \: cycle \\
+		Sum \: time &= (Average \: calculation + Thresholding + Detection) * cycle \: time \\
+		&= (672,384 + 362,560 + 639,424) * 1.25ns = 2.09 \: ms	\stepcounter{equation}\tag{\theequation} 
+\end{align*}
+
+\begin{align*}
+	Available \: time &= \#CPUs * Avg. \: burst \: time = 12 * \frac{27.84ms (dwell \: time)}{8(\#burst)} = 41.76 \: ms\\[0.3cm]
+	CPU \: utilization &= \frac{processing \: time}{available \: time} = \frac{14.31}{41.76} = 34.3\% \stepcounter{equation}\tag{\theequation} 
+\end{align*}
+
+
+\subsubsection{Utilization - Correlation Processing CPUs}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[]{figures/scheme5_mul_cpu_util}
+	\caption{Scheme-4, Utilization of Correlation Processing CPU}
+	\label{fig:mm:scheme5_mul_cpu_util}
+\end{figure}
+

@@ -38,9 +38,14 @@ Context switch time of 0.5ms is assumed for time partitioning. Every core does 2
 
 Assuming the order of SDRAM access is Core\#1, Core\#2, Core\#3 and Core\#4. Core\#2 waits for Core\#1 to complete (0.5ms), Core\#3 waits for Core\#1,2 (0.5ms + 0.5ms), Core\#4 waits for Core\#1,2,3 (0.5ms + 0.5ms + 0.5ms). This overhead in waiting time sums up to 3ms. Though only one context switch is contending, during the course of run it will be a scenario where two context switches will contend for SDRAM because of its skewed timing behaviour. Worstcase waiting time for four cores is 
 \begin{align*}
-	& = \frac{4*ContextSwitchTime \enspace + \enspace 2*OverheadInWaitingTime}{AvailableTime} \\[0.4cm]
+	& = \frac{4*T_{cs} \enspace + \enspace 2*T_{ow}}{T_{a}} \\[0.4cm]
 	& = \frac{4*2*0.5ms \enspace + \enspace 2*3ms}{4*20ms} = 12.5\% \stepcounter{equation}\tag{\theequation} 
 \end{align*}
+\noindent
+\textbf{Legend} \\
+\tab $T_{cs}:$ Context-switch time \\
+\tab $T_{ow}:$ Overhead in waiting time \\
+\tab $T_{a}:$ Available time \\
 
 In the worst case scenario, 12.5\% of the CPU time is spent only for context switching. This percentage is severe for a Radar processor. It degrades the application performance and much meaningful processing can be done during that time. \\
 
@@ -172,7 +177,7 @@ Core\#4 of the A/A Mode processing CPUs in Scheme-1 required more than the avail
 	\label{tbl:mm:scheme2_true_latency}
 \end{table}
 \FloatBarrier
-Here, Core\#2 is utilized beyond its limits and the Dwell time latency reaches up to 30\%. Both the Schemes will not adhere to the real-time requirements.
+Here, Core\#2 is utilized beyond its limits and the Dwell time latency reaches up to 30x Dwell time. Both the Schemes will not adhere to the real-time requirements.
 
 %\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -240,11 +245,11 @@ The measurement result of copying data from one memory location to another memor
 
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{|l|l|l|l|l|} 
+	\begin{tabular}{|l|l|} 
 	 \hline
-	 \textbf{Function} & \textbf{Best Rate [MB/s]} & \textbf{Avg time[s]} & \textbf{Min time[s]} & \textbf{Max time[s]} \\
+	 \textbf{Function} & \textbf{Best Rate [MiB/s]}  \\
 	 \hline
-	 Copy & 1048.7 & 0.177625 & 0.152575 & 0.217059 \\ \hline
+	 Copy & 1048.7 \\ \hline
 	\end{tabular}
 	\caption{Idle Memory Transfer Bandwidth}
 	\label{tbl:mm:bw_no_load}
@@ -257,7 +262,7 @@ To compute the peak memory bandwidth of the Radar application, STREAM benchmark 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Peak Memory Utilization}
 \label{ss:mm:mem_util}
-The percentage of the memory being used by a process can be extracted from \bverb|top| command. A bash script is written to read memory utilization 10 times a second (Appendix \ref{app:code:mem_util}) until the Radar application is running. The recorded peak memory utilization is exported to an output file for further analysis. This script is also run in background at low priority.
+The percentage of the memory being used by a process can be extracted from \bverb|top| command. A bash script(Appendix \ref{app:code:mem_util}) is written to read memory utilization of the Radar application every 10 times a second. The recorded peak memory utilization is exported to an output file for further analysis. This script is also run in background at low priority.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%   SUB-SECTION   %%%
@@ -268,7 +273,7 @@ CPU utilization is the ratio of busy time to the total time. Busy time is the ex
 
 \section{Performance Comparison of Single Core vs Four Cores}
 \label{sec:mm:perf_comp}
-A performance comparison study has been done on the Nitrogen6X board equipped with ARM Cortex A9 quad core processor running functional blocks of the Radar algorithm. In Figure \ref{fig:mm:1core_4core}, measurements of 1-thread, CMYACC means running CMYACC functional block on Core\#1 while keeping other cores in idle state. Likewise, measurements of 4-threads states that the CMYACC functional block is executed in all four cores simultaneously. The figure implies that the four core performance is not as good as single core performance. Bottleneck is imposed by the shared resources L2 cache and Memory. In-case more than one core wants to access a shared resource simultaneously, only one core is allowed to access them at a given time. Other cores have to wait until the shared resource is freed again. This increases worst-case execution time of the functional blocks when running on four cores. Although running four cores in parallel does increase the processing time, this thesis sticks to four core version to make use of all the execution resources.
+A performance comparison study has been done on the Nitrogen6X board equipped with ARM Cortex A9 quad core processor running functional blocks of the Radar processing algorithm. In Figure \ref{fig:mm:1core_4core}, measurements of 1-thread, CMYACC means running CMYACC functional block on Core\#1 while keeping other cores in idle state. Likewise, measurements of 4-threads states that the CMYACC functional block is executed in all four cores simultaneously. The figure implies that the four core performance is not as good as single core performance. Bottleneck is imposed by the shared resources L2 cache and Memory. In-case more than one core wants to access a shared resource simultaneously, only one core is allowed to access them at a given time. Other cores have to wait until the shared resource is freed again. This increases worst-case execution time of the functional blocks when running on four cores. Although running four cores in parallel does increase the processing time, this thesis sticks to four core version to make use of all the execution resources.
 
 \begin{figure}[h!]
 	\centering

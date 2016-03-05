@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Background and Related Work}
 \label{chap:bg_related_work}
-Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. The low cost, portable processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. \\
+Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. Low cost and portable Radar processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. \\
 ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,7 +157,7 @@ Linaro Linux is installed on the Nitrogen6X board along with Lightweight X11 Des
 \label{sec:bg_related_work:proc_chain}
 Previous work has been carried out by Airbus DS in Future Combat Air System (FCAS) project, see \cite{fcas}. This section is an excerpt of the FCAS project, describes the Radar processing chain to understand the rest of the thesis.
 
-At first, the Radar system in the flight scans the sky $\pm$60$^{\circ}$ from boresight. The azimuth scan of the antenna is sub-divided into 2 x 5 angular segments, called look directions (5 segments in the positive half and 5 segments in the negative half of the scan width). Given the beam width of 2.5$^{\circ}$, 48 beams are required to cover the 120$^{\circ}$ space. Figure \ref{fig:bg_related_work:aa_look_dir} explains the 5 look direction segments in positive half of the azimuth scan. The Air to Air Mode has different PRF set for different look directions. The PRF and range gate configuration determines the amount of input data to the Radar processor. Table \ref{tbl:aa_exe} shows the maximum execution time of the Radar functions running on a single core, 1GHz iMX6Quad processor. The baseline analysis scales down the results to 800MHz to match the IMA processor architecture.
+At first, the Radar system in the flight scans the sky $\pm$60$^{\circ}$ from bore-sight. The azimuth scan of the antenna is sub-divided into 2 x 5 angular segments, called look directions (5 segments in the positive half and 5 segments in the negative half of the scan width). Given the beam width of 2.5$^{\circ}$, 48 beams are required to cover the 120$^{\circ}$ space. Antenna's gain is high along the bore-sight direction \cite{boreSight}\cite{bsTR}. So, the look directions adjacent to the bore-sights have 4 beams each and the remaining 8 look directions have 5 beams each, counting 48 beams totally. Figure \ref{fig:bg_related_work:aa_look_dir} explains the 5 look direction segments in positive half of the azimuth scan. The Air to Air Mode has different PRF set for different look directions. The PRF and range gate configuration determines the amount of input data to the Radar processor. Table \ref{tbl:aa_exe} shows the maximum execution time of the Radar functions running on a single core, 1GHz iMX6Quad processor. The baseline analysis scales down the results to 800MHz to match the IMA processor architecture.
 
 \begin{figure}[h!]
 	\centering
@@ -254,7 +254,7 @@ The functional blocks shall be executed as shown in Figure \ref{fig:bg_related_w
 	\label{fig:bg_related_work:aa_seq}
 \end{figure}
 
-STREAM benchmark\cite{McCalpin2007} is used to measure memory bandwidth of a machine. The STREAM benchmark is a simple, synthetic benchmark designed to measure sustainable memory bandwidth (in MB/s) and a corresponding computation rate for four simple vector kernels namely Copy, Scale, Add and Triad \cite{streamDef}. According to the STREAM benchmark, 400 MiB/s data transfer rate is measured while copying data from one memory location of the SDRAM to another memory location, when a single core is active (2cycle/byte). L2 cache to SDRAM data transfer rate of 350MiB/s (2.29cycle/byte) is measured when all the four cores are active. Operating System overhead is assumed as the factor of 1.3 to carry out the execution. Cycle time of the core is 1.25ns, as it is running at 800MHz frequency. Execution cycle for the Correlation processing is heuristically assumed as follows.
+STREAM benchmark\cite{McCalpin2007} is used to measure memory bandwidth of a machine. The STREAM benchmark is a simple, synthetic benchmark designed to measure sustainable memory bandwidth (in MiB/s) and a corresponding computation rate for four simple vector kernels namely Copy, Scale, Add and Triad \cite{streamDef}. According to the STREAM benchmark, 400 MiB/s data transfer rate is measured while copying data from one memory location of the SDRAM to another memory location, when a single core is active (2cycle/byte). L2 cache to SDRAM data transfer rate of 350MiB/s (2.29cycle/byte) is measured when all the four cores are active. Operating System overhead is assumed as the factor of 1.3 to carry out the execution. Cycle time of the core is 1.25ns, as it is running at 800MHz frequency. Execution cycle for the Correlation processing is heuristically assumed as follows.
 
 
 \begin{table}[h!]
@@ -291,7 +291,7 @@ Air to Air Mode Radar has the following characteristics. The transmitted carrier
 	\label{fig:bg_related_work:aa_char}
 \end{table}
 
-Figure \ref{fig:bg_related_work:aa_char} shows the detailed information of the Radar system. The first burst of the Look direction-1 consists of 64 pulses transmitted at 19.5 KHz frequency and every pulse shall have 103 range gates. Range unfolding and Velocity unfolding are performed to compute the unambiguous range and unambiguous velocity of the target respectively. They can be mathematically calculated as follows. 
+Table \ref{fig:bg_related_work:aa_char} shows the detailed information of the Radar system. The first burst of the Look direction-1 consists of 64 pulses transmitted at 19.5 KHz frequency and every pulse shall have 103 range gates. Range unfolding and Velocity unfolding are performed to compute the unambiguous range and unambiguous velocity of the target respectively. They can be mathematically calculated as follows. 
 
 \begin{align*}
 	\label{equ:burst_time_calc}

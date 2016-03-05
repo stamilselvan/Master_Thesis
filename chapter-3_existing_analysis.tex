@@ -20,11 +20,11 @@ A/A mode processing and A/G mode processing are done in separate physical entiti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Scheme 1 - Space Partitioning}
 \label{sec:scheme_1}
-A RADAR echo received by the Radar antenna is distinguished as A/A mode or A/G mode by the iCON1 module. 
+A Radar echo received by the Radar antenna is distinguished as A/A mode or A/G mode by the iCON1 module. 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=160mm, height=220mm]{figures/scheme1}
-	\caption{ Scheme-1, Mode Mapping}
+	\caption{ Scheduling Scheme}
 	\label{fig:existing_analysis:scheme1}
 \end{figure}
 \FloatBarrier
@@ -52,7 +52,7 @@ Each CPU processes a Dwell of data. The processing results are dispatched to iCO
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/aa_scheme1}
-	\caption{Scheme-1, A/A Mode Processing}
+	\caption{A/A Mode Processing}
 	\label{fig:existing_analysis:aa_scheme1}
 \end{figure}
 
@@ -60,7 +60,7 @@ Each CPU processes a Dwell of data. The processing results are dispatched to iCO
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  SSUB-SECTION   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Scheduling of the Functional Blocks}
+\subsubsection{Scheduling Scheme}
 \label{sss:scheme1:aa:sched_blocks}
 Scheduling functional blocks in the IMA processor architecture is shown in Figure \ref{fig:existing_analysis:aa_scheme1}. As discussed earlier, only odd numbered CPUs (CPU1,3,5...23) take part in processing A/A Mode algorithm.\\[0.3cm]
 \textsl{Core\#1} receives incoming data from the Ethernet and stores them into Core\#1's buffer memory in SDRAM. Then the data is copied to Core\#2's buffer memory.\\[0.2cm]
@@ -164,7 +164,7 @@ CPU utilization is the ratio of processing time to the available time. The worst
 		}
 	\end{minipage}
 \end{minipage}
-\caption{Scheme-1, CPU Utilization}
+\caption{CPU Utilization}
 \label{ext_ana:sch1:cpu_util}
 \end{figure}
 
@@ -181,7 +181,7 @@ Time required to process a complete Dwell relate to the look direction-1 is show
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=145mm]{figures/scheme1_latency_tot}
-	\caption{Scheme-1, Dwell Processing time of Look Direction-1}
+	\caption{Dwell Processing time of Look Direction-1}
 	\label{fig:mm:scheme1_latency_tot}
 \end{figure}
 
@@ -198,7 +198,7 @@ Time required to process a complete Dwell relate to the look direction-1 is show
 	 4 & 46.20 & 513.00 & 11.10 \\ \hline
 	 5 & 54.26 & 617.05 & 11.37 \\ \hline
 	\end{tabular}
-	\caption{Scheme-1, A/A Mode Processing Latency}
+	\caption{A/A Mode Processing Latency}
 	\label{tbl:existing_analysis:aa_scheme1_latency}
 \end{table}
 
@@ -226,10 +226,8 @@ The CPUs in the DGPM are physically separated for A/A Mode and A/G Mode; accordi
 	& \textbf{Core\#1} & \textbf{Core\#2} & \textbf{Core\#3} & \textbf{Core\#4} \\ \hline
 	\textbf{Utilization} & 19.16\% & 24.32\% & 65.65\% & 75.58\% \\ \hline
 	\end{tabular}
-	\caption{Scheme-1, CPU Utilization}
+	\caption{CPU Utilization}
 \end{table}
-
-
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -251,7 +249,7 @@ Figure \ref{fig:existing_analysis:scheme2_partition} shows the time partitioning
 \begin{figure}[h!]
 	\centering
 	\includegraphics[height=55mm]{figures/scheme2_partition}
-	\caption{Scheme-2, Time Partition}
+	\caption{Time Partition}
 	\label{fig:existing_analysis:scheme2_partition}
 \end{figure}
 
@@ -260,14 +258,14 @@ A/A data and A/G data are distributed by iCON1 to PSM1 and PSM2 respectively. Pr
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=150mm]{figures/scheme2_partition_values}
-	\caption{Scheme-2, Values for Time Partition}
+	\caption{Values for Time Partition}
 	\label{fig:existing_analysis:scheme2_partition_values}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=160mm, height=220mm]{figures/scheme2_mode_mapping}
-	\caption{Scheme-2, Mode Mapping}
+	\caption{Scheduling Scheme}
 	\label{fig:existing_analysis:scheme2_mode_mapping}
 \end{figure}
 \clearpage
@@ -287,7 +285,7 @@ Available time is 24x shortest Dwell time. Since the core is time sliced, effect
 	 & \textbf{Core\#1} & \textbf{Core\#2} & \textbf{Core\#3} & \textbf{Core\#4} \\ \hline
 	 \textbf{Core Utilization} & 25\% & 53\% & 71\% & 63\% \\ \hline
 	\end{tabular}
-	\caption{Scheme-2, CPU Utilization}
+	\caption{CPU Utilization}
 	\label{tbl:existing_analysis:aa_scheme2_cpu_util}
 \end{table}
 
@@ -299,7 +297,7 @@ Time required to process a complete Dwell relate to the look direction-1 is show
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=145mm]{figures/scheme2_latency_tot}
-	\caption{Scheme-2, Dwell Processing time of Look Direction-1}
+	\caption{Dwell Processing time of Look Direction-1}
 	\label{fig:mm:scheme2_latency_tot}
 \end{figure}
 
@@ -315,9 +313,10 @@ Time required to process a complete Dwell relate to the look direction-1 is show
 	 4 & 46.20 & 880.00 & 19.05 \\ \hline
 	 5 & 54.26 & 1100 & 20.27 \\ \hline
 	\end{tabular}
-	\caption{Scheme-2, A/A Mode Processing Latency}
+	\caption{A/A Mode Processing Latency}
 	\label{tbl:existing_analysis:aa_scheme2_latency}
 \end{table}
+\FloatBarrier
 
 \subsubsection{Memory Utilization}
 \label{sss:scheme2:mem_util}
