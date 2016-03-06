@@ -13,11 +13,6 @@ The contribution of this thesis starts with scrutinizing the Baseline Analysis. 
 \label{mm:pros}
 Baseline analysis has considered every possible delicate detail to compute the worst case execution time. Upsides of the analysis are discussed here.
 
-%\subsubsection{Cache Miss}
-%Memory access time is different for different memory hierarchy levels. For instance, register memory can be accessed in one cycle, L1 cache in few cycles, L2 cache in 10 cycles and local DRAM needs approximately 100 cycles to be accessed by the CPU. To compute magnitude square root of 20 elements and store back the results to L1 cache, a core requires 280 cycles if the data are in L1 cache, 2140 cycles if the data are in SDRAM, assuming 4 cycles L1 access time and 10 cycle execution time per element. This kind of major variations are unfavourable for determinism. For safety critical systems the Worst Case Execution Time(WCET) needs to be analyzed and verified. The cache miss behaviour needs to be considered in the determination of the WCET. To achieve the worst case memory access times, it is assumed in the Existing Anlysis that a cache miss is produced for each memory access.
-
-%One of the ways to calculate Worst Case Execution Time (WCET) is to assume cache miss always. This is a pessimistic approach as the cache hit ratio is not always 0\%. 
-
 \subsubsection{CPU Utilization Balancing}
 In time partition scheme, CPU utilization factors for A/A mode and A/G mode can be well balanced by configuring time slot period. For instance, in space partition scheme, Core\#4 is utilized 75\% in A/A mode processing and 25\% in A/G mode processing. This information gives a hint for time partitioning that A/A mode needs more time span than A/G mode in Core\#4. It is adopted in Scheme-2, allocating 14.5ms for A/A mode and 4.5ms for A/G Mode to balance the CPU utilization. Dynamic partition configuration can be considered in future to improve CPU utilization balancing.
 
@@ -36,7 +31,7 @@ Context switch time of 0.5ms is assumed for time partitioning. Every core does 2
 	\label{fig:mm:mm_cons1}
 \end{figure}
 
-Assuming the order of SDRAM access is Core\#1, Core\#2, Core\#3 and Core\#4. Core\#2 waits for Core\#1 to complete (0.5ms), Core\#3 waits for Core\#1,2 (0.5ms + 0.5ms), Core\#4 waits for Core\#1,2,3 (0.5ms + 0.5ms + 0.5ms). This overhead in waiting time sums up to 3ms. Though only one context switch is contending, during the course of run it will be a scenario where two context switches will contend for SDRAM because of its skewed timing behaviour. Worstcase waiting time for four cores is 
+Assuming the order of SDRAM access is Core\#1, Core\#2, Core\#3 and Core\#4. Core\#2 waits for Core\#1 to complete (0.5ms), Core\#3 waits for Core\#1,2 (0.5ms + 0.5ms), Core\#4 waits for Core\#1,2,3 (0.5ms + 0.5ms + 0.5ms). This overhead in waiting time sums up to 3ms. Though only one context switch is contending, during the course of run it will be a scenario where two context switches will contend for SDRAM because of its skewed timing behaviour. Worst-case waiting time for four cores is 
 \begin{align*}
 	& = \frac{4*T_{cs} \enspace + \enspace 2*T_{ow}}{T_{a}} \\[0.4cm]
 	& = \frac{4*2*0.5ms \enspace + \enspace 2*3ms}{4*20ms} = 12.5\% \stepcounter{equation}\tag{\theequation} 
@@ -187,6 +182,38 @@ Here, Core\#2 is utilized beyond its limits and the Dwell time latency reaches u
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Test Procedure} 
 \label{sec:mm:test_procedure}
+A Nitrogen6X development kit is used to match the basic building block of the IMA processor architecture, which is iMX6Quad processor, clocked 1GHz. The communication to the Nitrogen6X board is carried via Ethernet interface. Measurements of the processing latency is performed on the target and exported in \bverb|.csv| format. The results are scaled down to 800MHz to match the IMA architecture. Scheduling schemes and processing latency analysis are based on the single iMX6Quad processor result, measured from the Nitrogen6X board.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%   SUB-SECTION   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Target Hardware}
+\label{ss:bg_related_work:hw}
+The target hardware is a Nirtogen6X development board (Appendix \ref{app:nitrogen6x}) from Boundary Devices Inc. It is a low cost development kit built with iMX6Quad processor. Some of it's features are:
+\begin{compactitem} 
+	\item Quad-Core ARM Cortex A9 processor clocked 1GHz
+	\item 1GiB of 64-bit wide DDR3 at 532MHz
+	\item Three display ports (RGB, LVDS and HDMI)
+	\item Serial ATA 2.5 (SATA) at 3GBit/s
+	\item Dual SD 3.0/SDXC card slots
+	\item 10/100/1000 Ethernet
+	\item 10-pin JTAG interface
+	\item High speed USB ports (2xHost, 1xOTG)
+	\item Real-Time Clock with battery backup
+\end{compactitem}
+
+\subsection{Software Development Platform}
+\label{ss:bg_related_work:sw}
+Linaro Linux is installed on the Nitrogen6X board along with Lightweight X11 Desktop Environment. Functional blocks of the Radar processing algorithm are written in \bverb|C|. Other details are:
+
+\begin{compactitem} 
+	\item \bverb|Linaro Linux 3.0.35-02828-g5cedf96| is installed on Nirtogen6X board.
+	\item Software Development Environment: Eclipse CDT Version: 3.8.0.
+	\item C compiler: \bverb|gcc Debian 4.7.2-5|.
+	\item Cross compiler: \\ARM A9 cross-compiler \bverb|gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux|.
+	\item Other application library: FFTW 3.3.3 \cite{fftw}. \\
+\end{compactitem} 
+
 Measurements of the Radar processor requirement factors such as Processing latency, Memory transfer bandwidth, Peak memory utilization and CPU utilization are performed as follows.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -221,8 +248,7 @@ To overcome this, the Radar functional block sequences are executed for 1000 ite
 \end{figure}
 A test run is made to study the effect of background tasks and services on the spikes. The background measurement tasks and services other than \verb|ssh, network-manager| are stopped. Now, only the minimal OS services are running. The Radar application is allowed to run in such less competitive environment. The result shows that the spikes are still occurring in few functional blocks, but the magnitude has reduced from 5x to 2x. As expected, execution time results of some short lived functional blocks do not have the spikes at all. It is concluded that the OS applications or services might have pre-empted the Radar application. Those spikes are removed from the graph and then the maximum execution time is computed. \vspace*{0.2cm}
 
-To effectively utilize all the available four cores, four threads are spawned from main thread to carry out the parallel execution. Core affinity of each thread is set such a way that four threads are mapped to four cores (Appendix \ref{app:code:core_affinity}). For example, thread1 will run on Core\#1, thread2 on Core\#2, thread3 on Core\#3 and thread4 on Core\#4.\\
-The Radar application is given higher priority than other user space tasks to give precedence. 
+To effectively utilize all the available four cores, four threads are spawned from main thread to carry out the parallel execution. Core affinity of each thread is set such a way that four threads are mapped to four cores (Appendix \ref{app:code:core_affinity}). For example, thread1 will run on Core\#1, thread2 on Core\#2, thread3 on Core\#3 and thread4 on Core\#4. The Radar application is given higher priority than other user space tasks to give precedence. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%   SUB-SECTION   %%%

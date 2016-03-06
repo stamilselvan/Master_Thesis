@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Scheme 3}
 \label{sec:mm:scheme4}
-According to the A/A Mode processing chain, only Correlation Processing is dependent on the results of the 8 bursts of a dwell. The burst processing chain except the correlation processing has no dependency and can therefor performed independently. The previous 7 bursts. Rest of the processing steps do not have any dependency, thus can be performed independently. The final Correlation Processing shall be computed serially. Space Partition configuration is adopted for Scheme-3 implementation.
+According to the A/A Mode processing chain, only Correlation Processing is dependent on the results of the 8 bursts of a dwell. The burst processing chain except the correlation processing has no dependency and can therefore performed independently. The previous 7 bursts. Rest of the processing steps do not have any dependency, thus can be performed independently. The final Correlation Processing shall be computed serially. Space Partition configuration is adopted for Scheme-3 implementation.
 
 \subsection{Hypothesis}
 \textbf{\textsl{A Burst shall be processed as soon as a core receives it. This avoids unnecessary waiting time to receive a complete Dwell (8 Bursts) data.}}\\[0.2cm]
@@ -41,7 +41,7 @@ The received A/A mode raw data will be processed as follows
 \begin{enumerate}
 \item PSM1 routes each burst data to each core starting from core1 of CPU1 to core4 of CPU6 in round robin fashion.
 \item Each core in the CPU1...6 performs burst processing followed by storing the results in SDRAM.
-\item In a burst processing CPU, a core completing the processing steps last will transfer all the cores(core1...4) results to the CPU7 for correlation processing. This avoids frequent communication between burst processing CPUs and correlation processing CPU. The data passed to the CPU7 is alarm list and their related information, which is smaller in size and assumed that it requires only 0.01ms to transfer.
+\item In a burst processing CPU, a core completing the processing steps last will transfer all the cores(Core\#1...\#4) results to the CPU7 for correlation processing. This avoids frequent communication between burst processing CPUs and correlation processing CPU. The data passed to the CPU7 is alarm list and their related information, which is smaller in size and assumed that it requires only 0.01ms to transfer.
 \item Each core of the CPU7 waits for processed 8 burst data, and then performs Correlation Processing followed by sending out the target detections to PSM1.
 \item PSM1 directs the results to tracking processor or display processor. Scheduling scheme is shown in Figure \ref{fig:mm:scheme4_data_distribution}.
 \end{enumerate}
@@ -387,7 +387,14 @@ At first, Core\#1 receives the dwell data for correlation processing, it does Mo
 \subsection{CPU Utilization}
 \label{ss:mm:scheme5:cpu_load}
 \subsubsection{Burst Processing CPUs}
-Twelve CPUs are processing one burst each. Available time of a CPU is the time span between reception of two bursts to the CPU, which is 12x average burst time. Figure \ref{sch4:chrt:cpu_util} summarizes the CPU utilization for every look direction. Total time required to process one channel of a burst by a core is calculated as the sum of IO processing, Beamforming, Pulse compression, FFT, CFAR, Thresholding, Detection and data copy time between SDRAM to the core. Detailed calculations can be found in appendix \ref{app:sch4_cpu_util}. As shown in the figure, it is implied that the peak CPU utilization reaches up to 50.8\%. 
+Twelve CPUs are processing one burst each. Available time of a CPU is the time span between reception of two bursts to the CPU, which is 12x average burst time. Figure \ref{sch4:chrt:cpu_util} summarizes the CPU utilization for every look direction. Total time required to process one channel of a burst by a core is calculated as the sum of IO processing, Beam-forming, Pulse compression, FFT, CFAR, Thresholding, Detection and data copy time between SDRAM to the core. Detailed calculations can be found in appendix \ref{app:sch4_cpu_util}. As shown in the figure, it is implied that the peak CPU utilization reaches up to 50.8\%. Figure \ref{fig:mm:sch4_proc_time_chrt} shows the processing time of the Radar processing chain for Look direction-1, PRF1.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=140mm]{figures/sch4_proc_time_chrt}
+	\caption{Burst Processing time for PRF1, Look Direction-1}
+	\label{fig:mm:sch4_proc_time_chrt}
+\end{figure}
 
 \begin{figure}[h!]
 \centering

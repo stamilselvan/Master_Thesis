@@ -3,8 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Background and Related Work}
 \label{chap:bg_related_work}
-Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. Low cost and portable Radar processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. \\
-ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
+Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. Low cost and portable Radar processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,48 +93,6 @@ Nominal data transfer rate of the communication links are 1GBit/s. Booting the s
 	\label{fig:bg_related_work:ima:radar_processor}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%   SECTION   %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiment Set-up}
-\label{s:bg_related_work:exp_setup}
-A Nitrogen6X development kit is used to match the basic building block of the IMA processor architecture, which is iMX6Quad processor, clocked 1GHz. The communication to the Nitrogen6X board is carried via Ethernet interface. Measurements of the processing latency is performed on the target and exported in \bverb|.csv| format. The results are scaled down to 800MHz to match the IMA architecture. Scheduling schemes and processing latency analysis are based on the single iMX6Quad processor result, measured from the Nitrogen6X board.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%   SUB-SECTION   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Target Hardware}
-\label{ss:bg_related_work:hw}
-The target hardware is a Nirtogen6X development board (Appendix \ref{app:nitrogen6x}) from Boundary Devices Inc. It is a low cost development kit built with iMX6Quad processor. Some of it's features are:
-\begin{compactitem} 
-	\item Quad-Core ARM Cortex A9 processor clocked 1GHz
-	\item 1GiB of 64-bit wide DDR3 at 532MHz
-	\item Three display ports (RGB, LVDS and HDMI)
-	\item Serial ATA 2.5 (SATA) at 3GBit/s
-	\item Dual SD 3.0/SDXC card slots
-	\item 10/100/1000 Ethernet
-	\item 10-pin JTAG interface
-	\item High speed USB ports (2xHost, 1xOTG)
-	\item Real-Time Clock with battery backup
-\end{compactitem}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%   SUB-SECTION   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Software Development Platform}
-\label{ss:bg_related_work:sw}
-Linaro Linux is installed on the Nitrogen6X board along with Lightweight X11 Desktop Environment. Functional blocks of the Radar processing algorithm are written in \bverb|C|. Other details are:
-
-\begin{compactitem} 
-	\item \bverb|Linaro Linux 3.0.35-02828-g5cedf96| is installed on Nirtogen6X board.
-	\item Software Development Environment: Eclipse CDT Version: 3.8.0.
-	\item C compiler: \bverb|gcc Debian 4.7.2-5|.
-	\item Cross compiler: \\ARM A9 cross-compiler \bverb|gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux|.
-	\item Other application library: FFTW 3.3.3 \cite{fftw}. \\
-\end{compactitem} 
-
 \lstset{ %
   backgroundcolor=\color{mildyellow},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
@@ -176,7 +133,7 @@ The Radar antenna has 8 transmit and receive channels and 1 guard channel. The g
 \end{figure}
 
 \subsection{Time Domain Processing}
-Beam-forming is a Digital Signal Processing technique that allows the Radar transceiver to focus on a particular direction. Beam-forming has to be performed for Sum channel($S_{S}$), Azimuth channel($S_{AZ}$) and Elevation channel($S_{EL}$). During Sum channel beam-forming, the input vectors of 8 antenna receive channels are multiplied with pre-calculated Sum channel beam-forming vectors. The resulting vectors are added to produce a Sum channel beam. This step is repeated for Azimuth channel and Elevation channel. Guard (9$^{th}$) channel doesn't require beam-forming, only requires float conversion. Each of the processed four channel data are multiplied by pre-calculated weighting vector. 
+Beam-forming is a Digital Signal Processing technique that allows the Radar antenna to focus on a particular direction. Beam-forming has to be performed for Sum channel($S_{S}$), Azimuth channel($S_{AZ}$) and Elevation channel($S_{EL}$). During Sum channel beam-forming, the input vectors of 8 antenna receive channels are multiplied with pre-calculated Sum channel beam-forming vectors. The resulting vectors are added to produce a Sum channel beam. This step is repeated for Azimuth channel and Elevation channel. Guard (9$^{th}$) channel doesn't require beam-forming, only requires float conversion. Each of the processed four channel data are multiplied by pre-calculated weighting vector. 
 
 Digital Pulse Compression, also called Convolution, is computation expensive in time domain, so it is performed in frequency domain. Convolution in time domain is multiplication in frequency domain, it is performed channel by channel by computing FFT, Multiplication followed by IFFT.
 
@@ -188,24 +145,25 @@ Digital Pulse Compression, also called Convolution, is computation expensive in 
 \end{figure}
 
 \subsection{Frequency Domain Processing (FDP)}
-Each channel pulse compressed data is in the form of [pulse x range] matrix. Frequency domain tranformation has to be applied on the data corresponding to the same range gates of different pulse. So the pulse compressed data shall be corner turned to [range x pulse] matrix as shown in Figure \ref{fig:bg_related_work:cot}, then FFT is computed for the Sum, Guard, Azimuth and Elevation channel followed by magnitude of the Sum channel and Guard channel are computed.
+Each channel pulse compressed data is in the form of [pulse x range] matrix. Frequency domain transformation has to be applied on the data corresponding to the same range gates of different pulse. So the pulse compressed data shall be corner turned to [range x pulse] matrix as shown in Figure \ref{fig:bg_related_work:cot}.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[]{figures/cot}
+	\includegraphics[width=90mm]{figures/cot}
 	\caption{Corner Turning}
 	\label{fig:bg_related_work:cot}
 \end{figure}
-
+\FloatBarrier
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=140mm]{figures/aa_fdp}
 	\caption{A/A Mode Frequency Domain Processing}
 	\label{fig:bg_related_work:aa_fdp}
 \end{figure}
+FFT is computed for the Sum, Guard, Azimuth and Elevation channel followed by magnitude of the Sum channel and Guard channel are computed on the corner turned data..
 
 \subsection{Detection Processing (DET)}
-Area threshold of the individual elements in the Sum channel and the Guard channel are determined by computing average of the surrounding elements values. An additional pre-alarm matrix is computed by comparing the amplitude matrix and the area threshold matrix. The pre-alarm says the detection may be a potential target. If the element in the amplitude matrix is greater than the corresponding element in the threshold matrix, pre-alarm is set TRUE in the corresponding pre-alarm matrix, otherwise pre-alarm element is set to FALSE. To prevent the Sum channel alarms caused by side-lobe entries, it is compared with the Guard channel alarms. \\The number of alarms are limited by the N$_{max\_alarms}$ with the shortest range from the list called Constant False Alarm Rate(CFAR). Alarm list is generated by referring the pre-alarm matrix and corresponding Sum, Azimuth, Elevation channel values.\\
+Area threshold of the individual elements in the Sum channel and the Guard channel are determined by computing average of the surrounding elements values. An additional pre-alarm matrix is computed by comparing the amplitude matrix and the area threshold matrix. The pre-alarm says the detection may be a potential target. If the element in the amplitude matrix is greater than the corresponding element in the threshold matrix, pre-alarm is set TRUE in the corresponding pre-alarm matrix, otherwise pre-alarm element is set to FALSE. To prevent the Sum channel alarms caused by side-lobe entries, it is compared with the Guard channel alarms. \\The number of alarms are limited by the N$_{max\_alarms}$ with the shortest range from the list called Constant False Alarm Rate(CFAR). Alarm list is generated by referring the pre-alarm matrix and corresponding Sum, Azimuth, Elevation channel values.
 
 \begin{figure}[h!]
 	\centering
@@ -213,6 +171,7 @@ Area threshold of the individual elements in the Sum channel and the Guard chann
 	\caption{A/A Mode Detection Processing}
 	\label{fig:bg_related_work:aa_det}
 \end{figure}
+
 
 \subsection{Correlation Processing}
 This stage resolves the ambiguity in distance and velocity by comparing the current burst data with 7 previous bursts. Correlation processing is not considered as a performance critical module and hence this stage is not benchmarked. 
@@ -302,7 +261,7 @@ Table \ref{fig:bg_related_work:aa_char} shows the detailed information of the Ra
 	Velocity \: unfolding &= 2 * ROUNDUP \bigg( \frac{max.velocity}{unambiguous \: velocity} \bigg ) \\[0.3cm] \stepcounter{equation}\tag{\theequation} 
 \end{align*}
 
-Active Electronically Scanned Array (AESA) Radar is an airborne Radar, capable of steering beams rapidly \cite{aesaAbt}. In case of AESA Radar, processing latency influences agility of the system. Beam steering is performed electronically in AESA Radar compared to the mechanical steering in conventional Radars. Dynamic carrier frequency and PRF characteristics of the AESA Radar makes it hard to be intercepted by Radar Warning Receiver.
+Active Electronically Scanned Array (AESA) Radar is an airborne Radar, capable of steering beams rapidly \cite{aesaAbt}. In case of AESA Radar, processing latency influences agility of the system. Beam steering is performed electronically in AESA Radar compared to the mechanical steering in conventional Radars. Dynamic carrier frequency and PRF characteristics of the AESA Radar makes it hard to be intercepted by Radar Warning Receiver \cite{aesaIntercept}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -321,7 +280,7 @@ Research has hit the industry with \textsl{Programmable DSP Cores for Radar Proc
 
 ARM type processor has been used by Zeng Y, Xu J and Peng D in Velocity Measuring System \cite{relWork2}. Implementation is done in assembly language to take advantage of the pipeline. It uses 24GHz frequency waves and can track the vehicle velocities from 5km/h to 250km/h in 1.5km range. It is a low cost, low power, compact system meant for traffic management.
 
-Cheng C, Chien-Chung C et al \cite{RTsched} proposed a real-time scheduling algorithm which manages resources of a specially designed parallel system, named programmable radar signal processor (PRSP), a special DSP processor. It is designed to be reconfigurable and applicable to most of the Radar systems. It efficiently allocates the tasks to the processing units, but the SwaP features are not addressed.
+Cheng C, Chien-Chung C et al \cite{RTsched} proposed a real-time scheduling algorithm which manages resources of a specially designed parallel system, named programmable radar signal processor (PRSP), a special DSP processor. It is designed to be reconfigurable and applicable to most of the Radar systems. It efficiently allocates the tasks to the processing units, but the SWaP features are not addressed.
 
 ZHAN H, YUAN L, and WANG L \cite{RTschedParallel} have proposed an improved allocation algorithm for Radar task allocation in distributed heterogeneous system using Hungarian algorithm. It uses scheduling queue, workload real-time detection and task accumulation threshold to estimate processor workload and allocate the task accordingly. Again, this paper makes better use of the highly capable resources, disregarding SWaP.
 

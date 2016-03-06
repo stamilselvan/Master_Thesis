@@ -3,12 +3,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Baseline Analysis}
 \label{chap:existing_analysis}
-This chapter explains the baseline analysis carried out by Airbus DS\cite{fcas}. An airborne Radar processor should be capable of processing both the Air to Air Mode data as well as Air to Ground Mode data. The scope of this thesis is limited to A/A Mode processing. Scheduling Schemes in this chapter are based on the timing information provided in the Tables \ref{tbl:aa_exe} and \ref{tbl:aa_exe}. The baseline analysis configures scheduling schemes in accordance to Space Partition and Time Partition.\\ 
-
+This chapter explains the baseline analysis carried out by Airbus DS\cite{fcas}. An airborne Radar processor should be capable of processing both the Air to Air Mode data as well as Air to Ground Mode data. The scope of this thesis is limited to A/A Mode processing. Implementation is not done for the baseline analysis. So, it only estimates the approximate processing latency, CPU utilization and memory utilization with reference to the functional block execution cycle listed in the Tables \ref{tbl:aa_exe} and \ref{tbl:aa_exe}. The baseline analysis configures scheduling schemes in accordance to Space Partition and Time Partition.
+\vspace*{2mm} \\
 \noindent
 \textbf{Time Partitioning:}\\
-One iMX6Quad CPU is time sliced to run A/A mode and A/G mode alternatively. The timeframe between two subsequent A/A mode execution is called major time frame. Memory and cache are also partitioned for each mode. Intra-partition communication can be done by buffers, semaphores and/or events. When the time slice is completed for Air to Air mode, context switch happens to store the details of A/A Mode and load the details of A/G Mode, afterwards the A/G mode begins execution. Violation of timing behaviour triggers an exception. \\
-
+One iMX6Quad CPU is time sliced to run A/A mode and A/G mode alternatively. The timeframe between two subsequent A/A mode execution is called major time frame. Memory and cache are also partitioned for each mode. Intra-partition communication can be done by buffers, semaphores and/or events. When the time slice is completed for Air to Air mode, context switch happens to store the details of A/A Mode and load the details of A/G Mode, afterwards the A/G mode begins execution. Violation of timing behaviour triggers an exception. 
+\vspace*{2mm} \\
 \noindent
 \textbf{Space Partitioning:} \\
 A/A mode processing and A/G mode processing are done in separate physical entities. It is the simplest configuration for dedicated data processing. Failure of one of the systems will not affect the other as they are independent. It is assumed that SDRAM and L2 cache are partitioned for 4 cores to improve determinism. Each core has pre-defined accessible address space in Memory and L2 cache. 
@@ -291,7 +291,7 @@ Available time is 24x shortest Dwell time. Since the core is time sliced, effect
 
 \subsubsection{Processing Latency}
 \label{sss:scheme2:latency}
-Processing latency is higher than Scheme-1 because a core gets approximately half of the available time for A/A Mode processing. Processing latency between 640ms and 1100ms is achieved depending on the look direction, which is also listed in Table \ref{tbl:existing_analysis:aa_scheme2_latency}.
+Processing latency is higher than Scheme-1, because a core gets approximately half of the available time for A/A Mode processing. Processing latency between 640ms and 1100ms is achieved depending on the look direction, which is also listed in Table \ref{tbl:existing_analysis:aa_scheme2_latency}.
 
 Time required to process a complete Dwell relate to the look direction-1 is shown in Figure \ref{fig:mm:scheme2_latency_tot}.
 \begin{figure}[h!]
