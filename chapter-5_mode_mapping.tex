@@ -282,7 +282,7 @@ Scheme-3 has 4x Dwell time latency, 66\% CPU utilization, 39.4\% memory transfer
 	 \hline
 	 \textbf{Parameter} & \textbf{Scheme-1} & \textbf{Acceptable Values} & \textbf{Scheme-3}\\
 	 \hline
-	 Dwells transmitted &  14.96 & 2 & 4.04 \\ \hline
+	 \#Dwells transmitted &  14.96 & 2 & 4.04 \\ \hline
 	 CPU utilization & 75.5\% & \textless 50\% & 66\% \\ \hline
 	 Memory utilization & 7\% & \textless 50\%  & 1\% \\ \hline
 	 Memory transfer bandwidth & NA & \textless 50\% & 41\%  \\ \hline
@@ -523,12 +523,12 @@ Memory footprint is reduced compared to the Scheme-3, leading to a smaller amoun
 
 Processing latency of 1.92x Dwell time and peak CPU utilization of 50.8\% are healthy values for Air to Air Mode Radar processor. It leaves remaining 49\% of the CPU utilization to accommodate future development. In fact, 8 CPUs are sufficient to give same processing latency. More CPUs are used to improve the utilization. Figure \ref{fig:mm:scheme5_summary} shows the relationship between number of CPUs used and their utilization without affecting the latency values. Any combination of the CPU sets can be chosen to achieve desired CPU utilization. Selecting 10 CPUs for burst processing and 1 CPU for correlation processing will have peak CPU utilization of 61\% and 1.92x dwell latency, leaving rest of the 13 CPUs for A/G mode processing in an IMA processor architecture. A comparison of  Scheme-1, Acceptable values and Scheme-4 is listed in Table \ref{tbl:mm:scheme5_comparison}.
 
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=90mm]{figures/scheme5_summary}
 	\caption{Relationship Between Number of CPUs and Utilization}
 	\label{fig:mm:scheme5_summary}
-\end{figure}
+\end{table}
 
 \begin{table}[h!]
 	\centering
@@ -536,7 +536,7 @@ Processing latency of 1.92x Dwell time and peak CPU utilization of 50.8\% are he
 	 \hline
 	 \textbf{Parameter} & \textbf{Scheme-1} & \textbf{Acceptable Values} & \textbf{Scheme-4}\\
 	 \hline
-	 Dwell latency &  14.96 & 2 & 1.97 \\ \hline
+	 \#Dwells transmitted &  14.96 & 2 & 1.97 \\ \hline
 	 CPU utilization & 75.5\% & \textless 50\% & 50.8\% \\ \hline
 	 Memory Utilization & 7\% & \textless 50\%  & 0.5\% \\ \hline
 	 Memory transfer bandwidth & NA & \textless 50\% & 30\%  \\ \hline

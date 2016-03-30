@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Background and Related Work}
 \label{chap:bg_related_work}
-Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. Low cost and portable Radar processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
+Minimizing size, weight and power consumption of the Radar processor without compromising performance is the topic under research. Low cost and portable Radar processor is intended for weight and power limited airborne platform such as Unmanned Airborne Vehicles \cite{uav}. On satisfactory performance, this may open doors for new business opportunities in Radar processing and safety critical applications. ARM is the favourable architecture in this regard, and has been running in millions of smart phones, tablets and portable gadgets. Instead of one high capacity, power hungry, bulk processor, several small, energy efficient, compact processors of ARM type can be deployed. The way of grouping the processors, experiment setup \footnote{These information are based on the technical documentation provided by Airbus Defence and Space GmbH, titled \textsl{Future Combat Air System - Analysis of IMA Modules,} version B.} and state of the art related work are elaborated in this chapter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,7 +133,7 @@ The Radar antenna has 8 transmit and receive channels and 1 guard channel. The g
 \end{figure}
 
 \subsection{Time Domain Processing}
-Beam-forming is a Digital Signal Processing technique that allows the Radar antenna to focus on a particular direction. Beam-forming has to be performed for Sum channel($S_{S}$), Azimuth channel($S_{AZ}$) and Elevation channel($S_{EL}$). During Sum channel beam-forming, the input vectors of 8 antenna receive channels are multiplied with pre-calculated Sum channel beam-forming vectors. The resulting vectors are added to produce a Sum channel beam. This step is repeated for Azimuth channel and Elevation channel. Guard (9$^{th}$) channel doesn't require beam-forming, only requires float conversion. Each of the processed four channel data are multiplied by pre-calculated weighting vector. 
+Beam-forming is a Digital Signal Processing technique that allows the Radar antenna to focus on a particular direction \cite{beamforming}. Beam-forming has to be performed for Sum channel($S_{S}$), Azimuth channel($S_{AZ}$) and Elevation channel($S_{EL}$). During Sum channel beam-forming, the input vectors of 8 antenna receive channels are multiplied with pre-calculated Sum channel beam-forming vectors. The resulting vectors are added to produce a Sum channel beam. This step is repeated for Azimuth channel and Elevation channel. Guard (9$^{th}$) channel doesn't require beam-forming, only requires float conversion. Each of the processed four channel data are multiplied by pre-calculated weighting vector. 
 
 Digital Pulse Compression, also called Convolution, is computation expensive in time domain, so it is performed in frequency domain. Convolution in time domain is multiplication in frequency domain, it is performed channel by channel by computing FFT, Multiplication followed by IFFT.
 
@@ -250,7 +250,7 @@ Air to Air Mode Radar has the following characteristics. The transmitted carrier
 	\label{fig:bg_related_work:aa_char}
 \end{table}
 
-Table \ref{fig:bg_related_work:aa_char} shows the detailed information of the Radar system. The first burst of the Look direction-1 consists of 64 pulses transmitted at 19.5 KHz frequency and every pulse shall have 103 range gates. Range unfolding and Velocity unfolding are performed to compute the unambiguous range and unambiguous velocity of the target respectively. They can be mathematically calculated as follows. 
+Table \ref{fig:bg_related_work:aa_char} shows the detailed information of the Radar system. The first burst of the Look direction-1 consists of 64 pulses transmitted at 19.5 KHz frequency and every pulse shall have 103 range gates. Range unfolding and Velocity unfolding are performed to compute the unambiguous range and unambiguous velocity of the target respectively. They can be mathematically calculated as follows \cite{unambiVelo}. 
 
 \begin{align*}
 	\label{equ:burst_time_calc}
@@ -282,7 +282,7 @@ ARM type processor has been used by Zeng Y, Xu J and Peng D in Velocity Measurin
 
 Cheng C, Chien-Chung C et al \cite{RTsched} proposed a real-time scheduling algorithm which manages resources of a specially designed parallel system, named programmable radar signal processor (PRSP), a special DSP processor. It is designed to be reconfigurable and applicable to most of the Radar systems. It efficiently allocates the tasks to the processing units, but the SWaP features are not addressed.
 
-ZHAN H, YUAN L, and WANG L \cite{RTschedParallel} have proposed an improved allocation algorithm for Radar task allocation in distributed heterogeneous system using Hungarian algorithm. It uses scheduling queue, workload real-time detection and task accumulation threshold to estimate processor workload and allocate the task accordingly. Again, this paper makes better use of the highly capable resources, disregarding SWaP.
+Zhan H, Yuan L, and Wang L \cite{RTschedParallel} have proposed an improved allocation algorithm for Radar task allocation in distributed heterogeneous system using Hungarian algorithm. It uses scheduling queue, workload real-time detection and task accumulation threshold to estimate processor workload and allocate the task accordingly. Again, this paper makes better use of the highly capable resources, disregarding SWaP.
 
 The aforementioned researches either concentrate in the direction of ARM processors to realize low cost and compact Radar processor or efficiently scheduling tasks to the available special purpose processors or using dedicated processors. They succeeded in doing so, but they are not meant for safety critical systems with a reasonably good range and resolution and less SWaP. This thesis connects the both ends, taking advantage of less SWaP from ARM processors and optimal scheduling scheme technique from efficient task allocation to bring less SWaP Radar processor for safety critical system.
 

@@ -416,12 +416,12 @@ Data structures of the Range Correlation Information(RCI) and Correlation Matrix
 
 \section{Utilization - Burst Processing CPUs}
 \label{app:sch4_cpu_util}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/scheme5_cpu_util1}
 	\caption{Scheme-4, CPU Utilization (1/2)}
 	\label{fig:mm:scheme5_cpu_util1}
-\end{figure}
+\end{table}
 Nothing has changed in I/O processing and Burst data input of the Beamforming. CPU time spent on processing is explained for PRF1, look direction-1. Listed calculations illustrate one channel processing per core, as shown in the data dependency diagram \ref{fig:mm:scheme5_data_path}.
 
 \begin{align*}
@@ -436,12 +436,12 @@ Nothing has changed in I/O processing and Burst data input of the Beamforming. C
 			&= (1 * 64 (27300 + 103 * 68)) * 1.25ns = 2.74 \: ms \stepcounter{equation}\tag{\theequation} 
 \end{align*}
 
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[width=160mm]{figures/scheme5_cpu_util2}
 	\caption{Scheme-4, CPU Utilization (2/2)}
 	\label{fig:mm:scheme5_cpu_util2}
-\end{figure}
+\end{table}
 
 \begin{align*}
 	FDP \: time &= \bigg(1channel * (\#pulses * \# \frac{RG}{pulse} (COT50 + RMY50) + \# \frac{RG}{pulse} * \\
@@ -459,15 +459,15 @@ Nothing has changed in I/O processing and Burst data input of the Beamforming. C
 
 \begin{align*}
 	Available \: time &= \#CPUs * Avg. \: burst \: time = 12 * \frac{27.84ms (dwell \: time)}{8(\#burst)} = 41.76 \: ms\\[0.3cm]
-	CPU \: utilization &= \frac{processing \: time}{available \: time} = \frac{14.31}{41.76} = 34.3\% \stepcounter{equation}\tag{\theequation} 
+	CPU \: utilization &= \frac{processing \: time}{available \: time} = \frac{14.31}{41.76} = 34.3\% stepcounter{equation}\tag{\theequation} 
 \end{align*}
 
 
 \subsubsection{Utilization - Correlation Processing CPUs}
-\begin{figure}[h!]
+\begin{table}[h!]
 	\centering
 	\includegraphics[]{figures/scheme5_mul_cpu_util}
 	\caption{Scheme-4, Utilization of Correlation Processing CPU}
 	\label{fig:mm:scheme5_mul_cpu_util}
-\end{figure}
+\end{table}
 

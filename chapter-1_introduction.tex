@@ -101,7 +101,7 @@ A baseline analysis is carried out by Airbus DS concludes that the ARM processor
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Requirements of the Radar Processor}
 \label{sec:intro:realtime_req}
-A Radar mounted on an aircraft or satellite is called Airborne Radar. The Airborne Radar processor should be able to process Air to Air (A/A) Mode data and Air to Ground Mode (A/G) data. As the Radar processor is a part of a safety critical system, it should stick to the industrial standards DO-178B/C, ARINC-653.
+A Radar mounted on an aircraft or satellite is called Airborne Radar. The Airborne Radar processor should be able to process Air to Air (A/A) Mode data and Air to Ground Mode (A/G) data. As the Radar processor is a part of a safety critical system, it should stick to the industrial standards DO-178B/C, ARINC-653 \cite{arinc653} \cite{do178b}.
 
 Since this research is in the early stage of development, and to allow room for further requirements, the CPU utilization is restricted to 50\% of the available CPU time, memory utilization should be less than 50\% of the available memory size and the peak data transfer rate of the Radar application should be less than 50\% of the maximum achievable data transfer bandwidth. The real-time requirements of the Radar processor shall be summarized as follows
 \begin{itemize}
